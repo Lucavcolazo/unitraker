@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useStudyStore } from '../store/useStudyStore';
+import { useAuth } from '../contexts/AuthContext';
 import { curriculum, type SubjectStatus } from '../data/curriculum';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -276,6 +277,14 @@ const SubjectList: React.FC<{
 
 export const StatsPage: React.FC = () => {
   const { subjectStates } = useStudyStore();
+  const { profile } = useAuth();
+
+  const filteredCurriculum = useMemo(() => {
+    if (profile?.degree_track === 'analista') {
+      return curriculum.filter(s => s.isAnalyst);
+    }
+    return curriculum;
+  }, [profile?.degree_track]);
 
   const stats = useMemo(() => {
     const byStatus: Record<SubjectStatus, typeof curriculum> = {
@@ -285,16 +294,16 @@ export const StatsPage: React.FC = () => {
       pending: [],
     };
 
-    curriculum.forEach(s => {
+    filteredCurriculum.forEach(s => {
       const st = subjectStates[s.id] || 'pending';
       byStatus[st].push(s);
     });
 
-    const analystAll = curriculum.filter(s => s.isAnalyst);
+    const analystAll = filteredCurriculum.filter(s => s.isAnalyst);
     const analystApproved = analystAll.filter(s => subjectStates[s.id] === 'approved');
     const analystRemaining = analystAll.filter(s => subjectStates[s.id] !== 'approved');
 
-    const engAll = curriculum;
+    const engAll = filteredCurriculum;
     const engApproved = engAll.filter(s => subjectStates[s.id] === 'approved');
     const engRemaining = engAll.filter(s => subjectStates[s.id] !== 'approved');
 
@@ -306,7 +315,7 @@ export const StatsPage: React.FC = () => {
 
     // By category
     const categories = new Map<string, { total: number; done: number }>();
-    curriculum.forEach(s => {
+    filteredCurriculum.forEach(s => {
       const cat = s.category;
       if (!categories.has(cat)) categories.set(cat, { total: 0, done: 0 });
       const c = categories.get(cat)!;
@@ -321,9 +330,9 @@ export const StatsPage: React.FC = () => {
       analystCreditsTotal, analystCreditsEarned,
       engCreditsTotal, engCreditsEarned,
       categories,
-      total: curriculum.length,
+      total: filteredCurriculum.length,
     };
-  }, [subjectStates]);
+  }, [subjectStates, filteredCurriculum]);
 
   const donutSegments = [
     { value: stats.byStatus.approved.length, color: 'rgba(34,197,94,0.8)', label: 'Aprobadas' },

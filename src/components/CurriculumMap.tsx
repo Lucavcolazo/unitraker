@@ -1,5 +1,6 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useStudyStore } from '../store/useStudyStore';
+import { useAuth } from '../contexts/AuthContext';
 import { curriculum, type SubjectStatus } from '../data/curriculum';
 import { Lock, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -255,9 +256,19 @@ export const CurriculumMap: React.FC = () => {
   const [arrows, setArrows] = useState<ArrowData[]>([]);
   const [svgSize, setSvgSize] = useState({ width: 0, height: 0 });
 
+  const { profile } = useAuth();
+
+  // Filter subjects by degree track
+  const filteredCurriculum = useMemo(() => {
+    if (profile?.degree_track === 'analista') {
+      return curriculum.filter(s => s.isAnalyst);
+    }
+    return curriculum;
+  }, [profile?.degree_track]);
+
   // Group subjects by year-semester
   const groups: Record<string, typeof curriculum> = {};
-  curriculum.forEach((sub) => {
+  filteredCurriculum.forEach((sub) => {
     const key = `${sub.year}-${sub.semester}`;
     if (!groups[key]) groups[key] = [];
     groups[key].push(sub);
@@ -288,7 +299,7 @@ export const CurriculumMap: React.FC = () => {
     const contentRect = content.getBoundingClientRect();
     const newArrows: ArrowData[] = [];
 
-    curriculum.forEach(sub => {
+    filteredCurriculum.forEach(sub => {
       if (sub.correlatives.length === 0) return;
       const targetEl = cardRefs.current.get(sub.id);
       if (!targetEl) return;
@@ -337,7 +348,7 @@ export const CurriculumMap: React.FC = () => {
       height: contentRect.height / scale,
     });
     setArrows(newArrows);
-  }, [subjectStates, zoom]);
+  }, [subjectStates, zoom, filteredCurriculum]);
 
   useEffect(() => {
     // Compute on mount and when states/zoom change, with a small delay for layout
