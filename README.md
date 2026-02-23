@@ -4,7 +4,9 @@ Bienvenido a **UniTraker**: tu compañero para llevar el progreso de la carrera 
 
 Acá podés marcar qué materias ya aprobaste, cuáles tenés en final y cuáles te faltan. Tenés un mapa del plan de estudios, estadísticas de avance y la posibilidad de comparar tu progreso con amigos.
 
-*(Próximamente: capturas de pantalla.)*
+
+![unitrakerscreen](https://github.com/user-attachments/assets/932896d0-a6af-4783-822e-61fbf6fa1e2c)
+
 
 ---
 
