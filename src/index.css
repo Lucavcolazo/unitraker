@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    background: rgb(8, 8, 12);
+    color: rgba(255,255,255,0.85);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ReactFlow overrides for dark theme */
+  .react-flow__node-default {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    font-size: inherit !important;
+    color: inherit !important;
+  }
+  
+  .react-flow__handle {
+    opacity: 0 !important;
+  }
+
+  .react-flow__controls {
+    border-radius: 8px !important;
+    overflow: hidden;
+  }
+
+  .react-flow__controls-button {
+    background: rgba(255,255,255,0.03) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+    fill: rgba(255,255,255,0.35) !important;
+    color: rgba(255,255,255,0.35) !important;
+  }
+
+  .react-flow__controls-button:hover {
+    background: rgba(255,255,255,0.06) !important;
+    fill: rgba(255,255,255,0.6) !important;
+  }
+
+  .react-flow__minimap {
+    display: none;
+  }
+
+  .react-flow__attribution {
+    display: none !important;
+  }
+}
