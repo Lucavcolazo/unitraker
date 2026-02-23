@@ -6,25 +6,25 @@ import { curriculum, type SubjectStatus } from '../data/curriculum';
 import { Lock, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// ── Status styles ──────────────────────────────────────────
+// ── Status styles (paleta desaturada) ───────────────────────
 const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: string; glow: string }> = {
   pending: {
-    bg: 'rgba(255,255,255,0.02)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    bg: 'var(--bg-surface)',
+    border: '1px solid var(--bg-border)',
     text: 'rgba(255,255,255,0.4)',
     glow: 'none',
   },
   final: {
-    bg: 'rgba(249,115,22,0.07)',
-    border: '1px solid rgba(249,115,22,0.4)',
-    text: 'rgba(249,115,22,0.9)',
-    glow: '0 0 16px rgba(249,115,22,0.08)',
+    bg: 'var(--status-final-bg)',
+    border: '1px solid var(--status-final-border)',
+    text: 'var(--status-final)',
+    glow: '0 0 16px rgba(251, 146, 60, 0.08)',
   },
   approved: {
-    bg: 'rgba(34,197,94,0.07)',
-    border: '1px solid rgba(34,197,94,0.35)',
-    text: 'rgba(34,197,94,0.9)',
-    glow: '0 0 16px rgba(34,197,94,0.06)',
+    bg: 'var(--status-aprobada-bg)',
+    border: '1px solid var(--status-aprobada-border)',
+    text: 'var(--status-aprobada)',
+    glow: '0 0 16px rgba(74, 222, 128, 0.06)',
   },
 };
 
@@ -72,7 +72,7 @@ const SubjectCard: React.FC<{
         textAlign: 'center',
         position: 'relative',
         transition: 'all 0.2s ease',
-        fontFamily: "'Inter', sans-serif",
+        fontFamily: "'Geist', sans-serif",
       }}
     >
       {/* Lock icon */}
@@ -369,8 +369,8 @@ export const CurriculumMap: React.FC = () => {
       style={{
         flex: 1,
         overflow: 'auto',
-        background: 'rgb(8, 8, 12)',
-        fontFamily: "'Inter', sans-serif",
+        background: 'var(--bg-base)',
+        fontFamily: "'Geist', sans-serif",
         position: 'relative',
       }}
     >
@@ -509,7 +509,7 @@ export const CurriculumMap: React.FC = () => {
         <div style={{
           textAlign: 'center', fontSize: '9px', fontWeight: 600,
           color: 'rgba(255,255,255,0.3)', padding: '2px 0',
-          letterSpacing: '0.02em', fontFamily: "'Inter', sans-serif",
+          letterSpacing: '0.02em', fontFamily: "'Geist', sans-serif",
         }}>
           {zoom}%
         </div>

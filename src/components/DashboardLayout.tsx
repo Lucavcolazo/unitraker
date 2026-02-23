@@ -88,9 +88,9 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
       width: '100vw',
       display: 'flex',
       flexDirection: 'column',
-      background: 'rgb(8, 8, 12)',
+      background: 'var(--bg-base)',
       color: 'rgba(255,255,255,0.85)',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Geist', sans-serif",
       overflow: 'hidden',
     }}>
       {/* Header */}
@@ -150,7 +150,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
                   color: 'rgba(255,255,255,0.85)',
                   fontSize: '11px',
                   fontWeight: 600,
-                  fontFamily: "'Inter', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   outline: 'none',
                   cursor: 'pointer',
                   appearance: 'none',
@@ -188,7 +188,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
                 cursor: 'pointer',
                 fontSize: '11px',
                 fontWeight: 600,
-                fontFamily: "'Inter', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 letterSpacing: '0.01em',
                 transition: 'all 0.2s ease',
                 background: section === tab.id ? 'rgba(255,255,255,0.08)' : 'transparent',
@@ -225,9 +225,9 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
             pointerEvents: section === 'map' ? 'auto' : 'none',
           }}>
             {[
-              { label: 'Pendiente', color: 'rgba(255,255,255,0.2)', bg: 'rgba(255,255,255,0.04)' },
-              { label: 'Final', color: 'rgba(249,115,22,0.8)', bg: 'rgba(249,115,22,0.1)' },
-              { label: 'Aprobada', color: 'rgba(34,197,94,0.8)', bg: 'rgba(34,197,94,0.1)' },
+              { label: 'Pendiente', color: 'rgba(255,255,255,0.2)', bg: 'var(--bg-surface)' },
+              { label: 'Final', color: '#FB923C', bg: 'var(--status-final-bg)' },
+              { label: 'Aprobada', color: '#4ADE80', bg: 'var(--status-aprobada-bg)' },
             ].map(({ label, color, bg }) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <div style={{ width: 7, height: 7, borderRadius: '50%', background: bg, border: `1.5px solid ${color}` }} />
@@ -245,7 +245,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
               border: section === 'settings' ? `1.5px solid ${profileColor}40` : '1.5px solid rgba(255,255,255,0.06)',
               background: section === 'settings' ? `${profileColor}08` : 'rgba(255,255,255,0.02)',
               cursor: 'pointer', transition: 'all 0.2s ease',
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'Geist', sans-serif",
             }}
             onMouseEnter={e => { if (section !== 'settings') e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
             onMouseLeave={e => { if (section !== 'settings') e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; }}

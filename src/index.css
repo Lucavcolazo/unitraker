@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+:root {
+  /* Paleta base — negro con toque violeta sutil */
+  --bg-base: #0E0D0F;
+  --bg-surface: #141318;
+  --bg-elevated: #1C1A21;
+  --bg-border: #2C2830;
+  /* Colores de estado — menos saturación */
+  --status-aprobada: #4ADE80;
+  --status-aprobada-border: rgba(74, 222, 128, 0.35);
+  --status-aprobada-bg: rgba(74, 222, 128, 0.05);
+  --status-final: #FB923C;
+  --status-final-border: rgba(251, 146, 60, 0.35);
+  --status-final-bg: rgba(251, 146, 60, 0.05);
+  --status-pendiente-border: #2C2830;
+  --status-pendiente-bg: #141318;
+  --status-regular: #60A5FA;
+  --status-regular-bg: rgba(96, 165, 250, 0.12);
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -8,9 +27,9 @@
   body {
     margin: 0;
     padding: 0;
-    background: rgb(8, 8, 12);
+    background: var(--bg-base);
     color: rgba(255,255,255,0.85);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

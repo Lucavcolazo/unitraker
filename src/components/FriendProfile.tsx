@@ -27,9 +27,9 @@ const statusIcon: Record<SubjectStatus, React.ReactNode> = {
 };
 
 const statusColor: Record<SubjectStatus, string> = {
-  approved: 'rgba(34,197,94,0.8)',
-  final: 'rgba(249,115,22,0.8)',
-  pending: 'rgba(255,255,255,0.15)',
+  approved: '#4ADE80',
+  final: '#FB923C',
+  pending: 'rgba(255,255,255,0.35)',
 };
 
 interface Props {
@@ -53,7 +53,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
 
   if (!friendProfile) {
     return (
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter', sans-serif" }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Geist', sans-serif" }}>
         <div style={{ width: 24, height: 24, border: '2px solid rgba(59,130,246,0.15)', borderTopColor: 'rgba(59,130,246,0.7)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
         <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -98,7 +98,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
   // Vista preview (como Mi Perfil): solo tarjeta con stats y progreso, sin grilla de materias
   if (!compareMode) {
     return (
-      <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Inter', sans-serif" }}>
+      <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Geist', sans-serif" }}>
         <div style={{ maxWidth: '500px', margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -124,7 +124,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
                   background: copied ? 'rgba(34,197,94,0.2)' : 'rgba(59,130,246,0.15)',
                   color: copied ? 'rgba(34,197,94,0.9)' : 'rgba(59,130,246,0.9)',
                   fontSize: '11px', fontWeight: 600, cursor: copying ? 'wait' : 'pointer',
-                  fontFamily: "'Inter', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                 }}
               >
                 <Copy size={12} />
@@ -221,7 +221,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
 
   // Vista comparación: header + grilla de materias
   return (
-    <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Geist', sans-serif" }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
           <button onClick={onBack} style={{

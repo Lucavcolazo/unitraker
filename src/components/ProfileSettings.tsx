@@ -109,7 +109,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
   // Profile view (how others see you)
   if (!showSettings) {
     return (
-      <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Inter', sans-serif" }}>
+      <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Geist', sans-serif" }}>
         <div style={{ maxWidth: '500px', margin: '0 auto' }}>
           {/* Header with gear */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
@@ -133,7 +133,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                 padding: '6px 12px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)',
                 color: 'rgba(255,255,255,0.4)', cursor: 'pointer',
-                fontSize: '11px', fontWeight: 600, fontFamily: "'Inter', sans-serif",
+                fontSize: '11px', fontWeight: 600, fontFamily: "'Geist', sans-serif",
               }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; }}
@@ -194,10 +194,10 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
           {/* Stats row */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '16px' }}>
             {[
-              { label: 'Aprobadas', value: approved, color: 'rgba(34,197,94,0.8)', icon: <CheckCircle2 size={13} /> },
-              { label: 'Final pend.', value: finals, color: 'rgba(249,115,22,0.8)', icon: <FileText size={13} /> },
+              { label: 'Aprobadas', value: approved, color: '#4ADE80', icon: <CheckCircle2 size={13} /> },
+              { label: 'Final pend.', value: finals, color: '#FB923C', icon: <FileText size={13} /> },
               { label: 'Total', value: total, color: 'rgba(255,255,255,0.5)', icon: <GraduationCap size={13} /> },
-              { label: 'Amigos', value: friends.length, color: 'rgba(59,130,246,0.8)', icon: <Users size={13} /> },
+              { label: 'Amigos', value: friends.length, color: '#60A5FA', icon: <Users size={13} /> },
             ].map(s => (
               <motion.div
                 key={s.label}
@@ -205,8 +205,8 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
                 style={{
-                  background: 'rgba(255,255,255,0.02)',
-                  border: '1px solid rgba(255,255,255,0.04)',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--bg-border)',
                   borderRadius: '10px',
                   padding: '12px',
                   textAlign: 'center',
@@ -221,10 +221,11 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
 
           {/* Progress bar */}
           <div style={{
-            background: 'rgba(255,255,255,0.02)',
-            border: '1px solid rgba(255,255,255,0.04)',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--bg-border)',
             borderRadius: '10px',
             padding: '14px 16px',
+            marginBottom: '16px',
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
               <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.4)' }}>Progreso</span>
@@ -239,6 +240,83 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
               />
             </div>
           </div>
+
+          {/* Progreso por área */}
+          {(() => {
+            const byCategory: Record<string, { total: number; done: number }> = {};
+            filtered.forEach(s => {
+              const cat = s.category || 'General';
+              if (!byCategory[cat]) byCategory[cat] = { total: 0, done: 0 };
+              byCategory[cat].total++;
+              if (subjectStates[s.id] === 'approved') byCategory[cat].done++;
+            });
+            const categories = Object.entries(byCategory).sort(([, a], [, b]) => b.done / b.total - a.done / a.total);
+            if (categories.length === 0) return null;
+            return (
+              <div style={{
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--bg-border)',
+                borderRadius: '10px',
+                padding: '14px 16px',
+                marginBottom: '16px',
+              }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Progreso por área
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {categories.map(([cat, { total, done }]) => {
+                    const catPct = total > 0 ? Math.round((done / total) * 100) : 0;
+                    return (
+                      <div key={cat} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>{cat}</span>
+                          <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{done}/{total}</span>
+                        </div>
+                        <div style={{ height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${catPct}%` }}
+                            transition={{ duration: 0.5, ease: 'easeOut' }}
+                            style={{ height: '100%', borderRadius: '2px', background: currentColor }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Últimas aprobadas (3) */}
+          {(() => {
+            const approvedList = filtered
+              .filter(s => subjectStates[s.id] === 'approved')
+              .sort((a, b) => (b.year * 10 + b.semester) - (a.year * 10 + a.semester))
+              .slice(0, 3);
+            if (approvedList.length === 0) return null;
+            return (
+              <div style={{
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--bg-border)',
+                borderRadius: '10px',
+                padding: '14px 16px',
+              }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Últimas aprobadas
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {approvedList.map(s => (
+                    <li key={s.id} style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <CheckCircle2 size={12} style={{ color: '#4ADE80', flexShrink: 0 }} />
+                      <span>{s.name}</span>
+                      <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>· {s.year}° año</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })()}
         </div>
       </div>
     );
@@ -248,7 +326,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
   const selectedIconNode = ICONS.find(i => i.name === profileIcon)?.icon || <User size={18} />;
 
   return (
-    <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Geist', sans-serif" }}>
       <div style={{ maxWidth: '500px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
@@ -298,7 +376,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
               style={{
                 width: '100%', padding: '10px 12px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)',
-                color: 'rgba(255,255,255,0.85)', fontSize: '13px', fontFamily: "'Inter', sans-serif",
+                color: 'rgba(255,255,255,0.85)', fontSize: '13px', fontFamily: "'Geist', sans-serif",
                 outline: 'none',
               }}
               onFocus={e => e.currentTarget.style.borderColor = `${profileColor}60`}
@@ -318,7 +396,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
               style={{
                 width: '100%', padding: '10px 12px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)',
-                color: 'rgba(255,255,255,0.85)', fontSize: '13px', fontFamily: "'Inter', sans-serif",
+                color: 'rgba(255,255,255,0.85)', fontSize: '13px', fontFamily: "'Geist', sans-serif",
                 outline: 'none',
               }}
               onFocus={e => e.currentTarget.style.borderColor = `${profileColor}60`}
@@ -362,7 +440,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                             style={{
                               padding: '5px 10px', borderRadius: '6px', border: 'none',
                               background: 'rgba(59,130,246,0.12)', color: 'rgba(59,130,246,0.8)',
-                              fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter', sans-serif",
+                              fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Geist', sans-serif",
                             }}
                           >
                             Usar
@@ -376,7 +454,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                               style={{
                                 padding: '4px 8px', borderRadius: '4px', border: 'none',
                                 background: 'rgba(239,68,68,0.2)', color: 'rgba(239,68,68,0.9)',
-                                fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter', sans-serif",
+                                fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Geist', sans-serif",
                               }}
                             >
                               Sí
@@ -386,7 +464,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                               style={{
                                 padding: '4px 8px', borderRadius: '4px', border: 'none',
                                 background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)',
-                                fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Inter', sans-serif",
+                                fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Geist', sans-serif",
                               }}
                             >
                               No
@@ -417,7 +495,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                         border: '1px dashed rgba(255,255,255,0.08)', background: 'transparent',
                         color: 'rgba(59,130,246,0.8)', fontSize: '11px', fontWeight: 600,
                         cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                        fontFamily: "'Inter', sans-serif",
+                        fontFamily: "'Geist', sans-serif",
                       }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'; e.currentTarget.style.background = 'rgba(59,130,246,0.05)'; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.background = 'transparent'; }}
@@ -445,7 +523,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                   onClick={() => setDegreeTrack(opt.id)}
                   style={{
                     flex: 1, padding: '10px', borderRadius: '8px', cursor: 'pointer',
-                    fontSize: '11px', fontWeight: 600, fontFamily: "'Inter', sans-serif",
+                    fontSize: '11px', fontWeight: 600, fontFamily: "'Geist', sans-serif",
                     border: degreeTrack === opt.id ? `1px solid ${profileColor}50` : '1px solid rgba(255,255,255,0.06)',
                     background: degreeTrack === opt.id ? `${profileColor}10` : 'rgba(255,255,255,0.02)',
                     color: degreeTrack === opt.id ? profileColor : 'rgba(255,255,255,0.4)',
@@ -516,7 +594,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                 flex: 1, padding: '10px', borderRadius: '8px', border: 'none',
                 background: saved ? 'rgba(34,197,94,0.15)' : `linear-gradient(135deg, ${profileColor}e0, ${profileColor}b0)`,
                 color: saved ? 'rgba(34,197,94,0.9)' : 'white',
-                fontSize: '12px', fontWeight: 700, fontFamily: "'Inter', sans-serif",
+                fontSize: '12px', fontWeight: 700, fontFamily: "'Geist', sans-serif",
                 cursor: saving ? 'wait' : 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                 transition: 'all 0.2s ease',
@@ -535,7 +613,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                 border: '1px solid rgba(239,68,68,0.15)',
                 background: 'rgba(239,68,68,0.05)',
                 color: 'rgba(239,68,68,0.7)',
-                fontSize: '12px', fontWeight: 600, fontFamily: "'Inter', sans-serif",
+                fontSize: '12px', fontWeight: 600, fontFamily: "'Geist', sans-serif",
                 cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '6px',
                 transition: 'all 0.2s ease',

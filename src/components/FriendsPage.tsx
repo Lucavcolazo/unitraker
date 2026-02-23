@@ -1,10 +1,13 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriendsStore } from '../store/useFriendsStore';
+import { useStudyStore } from '../store/useStudyStore';
+import { usePlanStore } from '../store/usePlanStore';
+import { curriculum } from '../data/curriculum';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, UserPlus, Check, X, Users, ChevronRight,
-  ArrowLeftRight, Loader2, Bell, UserCheck,
+  ArrowLeftRight, Loader2, Bell,
   Star, Heart, Zap, Shield, Flame, Sun, Moon, Cloud,
   Anchor, Coffee, Music, Camera, Gamepad2, Rocket, User, GraduationCap,
 } from 'lucide-react';
@@ -25,16 +28,26 @@ interface Props {
 }
 
 export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const {
     friends, pendingRequests, searchResults, searching, loading,
     loadFriends, loadPendingRequests, searchUsers,
     sendRequest, acceptRequest, rejectRequest, removeFriend, clearSearch,
+    friendStatsCache, loadFriendStats,
   } = useFriendsStore();
+  const { subjectStates } = useStudyStore();
+  const { activePlanSubjects } = usePlanStore();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [sendingTo, setSendingTo] = useState<string | null>(null);
   const [sentMessage, setSentMessage] = useState('');
+
+  const base = activePlanSubjects.length > 0 ? activePlanSubjects : curriculum;
+  const myApproved = base.filter(s => subjectStates[s.id] === 'approved').length;
+  const myTotal = base.length;
+  const myPending = myTotal - myApproved;
+  const myPct = myTotal > 0 ? Math.round((myApproved / myTotal) * 100) : 0;
 
   useEffect(() => {
     if (user) {
@@ -42,6 +55,14 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
       loadPendingRequests(user.id);
     }
   }, [user, loadFriends, loadPendingRequests]);
+
+  useEffect(() => {
+    if (!user || friends.length === 0) return;
+    friends.forEach(f => {
+      const friend = f.sender_id === user.id ? f.receiver : f.sender;
+      if (friend?.id) loadFriendStats(friend.id);
+    });
+  }, [user, friends, loadFriendStats]);
 
   const handleSearch = useCallback(() => {
     if (user && searchQuery.trim()) {
@@ -74,7 +95,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
       flex: 1,
       overflow: 'auto',
       padding: '24px',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Geist', sans-serif",
     }}>
       <div style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* Search */}
@@ -97,10 +118,11 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
               onChange={e => setSearchQuery(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSearch()}
               placeholder="Nombre o email..."
+              ref={searchInputRef}
               style={{
                 flex: 1, padding: '9px 12px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)',
-                color: 'rgba(255,255,255,0.85)', fontSize: '12px', fontFamily: "'Inter', sans-serif",
+                color: 'rgba(255,255,255,0.85)', fontSize: '12px', fontFamily: "'Geist', sans-serif",
                 outline: 'none',
               }}
             />
@@ -110,7 +132,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
               style={{
                 padding: '9px 16px', borderRadius: '8px', border: 'none',
                 background: 'rgba(59,130,246,0.15)', color: 'rgba(59,130,246,0.8)',
-                fontSize: '12px', fontWeight: 600, fontFamily: "'Inter', sans-serif",
+                fontSize: '12px', fontWeight: 600, fontFamily: "'Geist', sans-serif",
                 cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '5px',
               }}
@@ -174,7 +196,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
                         padding: '5px 10px', borderRadius: '6px', border: 'none',
                         background: 'rgba(59,130,246,0.12)', color: 'rgba(59,130,246,0.8)',
                         fontSize: '10px', fontWeight: 600, cursor: 'pointer',
-                        fontFamily: "'Inter', sans-serif",
+                        fontFamily: "'Geist', sans-serif",
                       }}
                     >
                       <UserPlus size={11} /> Agregar
@@ -282,79 +304,128 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
               <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
             </div>
           ) : friends.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '24px', color: 'rgba(255,255,255,0.2)', fontSize: '12px' }}>
-              <UserCheck size={20} style={{ marginBottom: '8px', opacity: 0.3 }} />
-              <div>Todavía no tenés amigos</div>
-              <div style={{ fontSize: '10px', marginTop: '4px' }}>Buscá compañeros arriba para agregarlos</div>
+            <div style={{
+              textAlign: 'center', padding: '32px 24px',
+              background: 'var(--bg-surface)', border: '1px solid var(--bg-border)',
+              borderRadius: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
+            }}>
+              <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Users size={24} style={{ color: 'rgba(255,255,255,0.25)' }} />
+              </div>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>Aún no tenés amigos</div>
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', maxWidth: '280px' }}>
+                Agregá compañeros para comparar progreso y ver quién va adelante.
+              </div>
+              <button
+                type="button"
+                onClick={() => searchInputRef.current?.focus()}
+                style={{
+                  marginTop: '4px', padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--bg-border)',
+                  background: 'var(--bg-elevated)', color: 'rgba(255,255,255,0.7)', fontSize: '12px', fontWeight: 600,
+                  cursor: 'pointer', fontFamily: "'Geist', sans-serif",
+                }}
+              >
+                Buscar compañeros
+              </button>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {friends.map(f => {
                 const friend = getFriendFromFriendship(f);
                 if (!friend) return null;
+                const stats = friendStatsCache[friend.id];
 
-                // Calc friend's approved count
                 return (
                   <div
                     key={f.id}
                     style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '10px', borderRadius: '8px', background: 'rgba(255,255,255,0.01)',
-                      transition: 'background 0.15s ease',
+                      padding: '12px', borderRadius: '10px', background: 'var(--bg-surface)',
+                      border: '1px solid var(--bg-border)',
+                      display: 'flex', flexDirection: 'column', gap: '10px',
                     }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.01)'}
                   >
-                    <div
-                      style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', flex: 1 }}
-                      onClick={() => onViewFriend(friend.id)}
-                    >
-                      <div style={{
-                        width: 32, height: 32, borderRadius: '50%',
-                        background: `${friend.profile_color}18`,
-                        border: `1.5px solid ${friend.profile_color}40`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: friend.profile_color,
-                      }}>
-                        {ICON_MAP[friend.profile_icon] || <User size={14} />}
-                      </div>
-                      <div>
-                        <div style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>
-                          {friend.display_name}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div
+                        style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', flex: 1 }}
+                        onClick={() => onViewFriend(friend.id)}
+                      >
+                        <div style={{
+                          width: 32, height: 32, borderRadius: '50%',
+                          background: `${friend.profile_color}18`,
+                          border: `1.5px solid ${friend.profile_color}40`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          color: friend.profile_color,
+                        }}>
+                          {ICON_MAP[friend.profile_icon] || <User size={14} />}
                         </div>
-                        <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.25)' }}>
-                          {friend.degree_track === 'analista' ? 'Analista' : 'Ingeniería'}
+                        <div>
+                          <div style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>
+                            {friend.display_name}
+                          </div>
+                          <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.35)' }}>
+                            {friend.degree_track === 'analista' ? 'Analista' : 'Ingeniería'}
+                          </div>
                         </div>
+                        <ChevronRight size={13} style={{ color: 'rgba(255,255,255,0.2)', marginLeft: 'auto' }} />
                       </div>
-                      <ChevronRight size={13} style={{ color: 'rgba(255,255,255,0.15)', marginLeft: 'auto' }} />
+                      <div style={{ display: 'flex', gap: '4px', marginLeft: '8px' }}>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onCompare(friend.id); }}
+                          title="Comparar"
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '3px',
+                            padding: '5px 8px', borderRadius: '6px', border: 'none',
+                            background: 'rgba(168,85,247,0.1)', color: 'rgba(168,85,247,0.7)',
+                            fontSize: '9px', fontWeight: 600, cursor: 'pointer',
+                            fontFamily: "'Geist', sans-serif",
+                          }}
+                        >
+                          <ArrowLeftRight size={10} /> Comparar
+                        </button>
+                        <button
+                          onClick={() => removeFriend(f.id)}
+                          title="Eliminar"
+                          style={{
+                            width: 26, height: 26, borderRadius: '6px', border: 'none',
+                            background: 'rgba(239,68,68,0.06)', color: 'rgba(239,68,68,0.4)',
+                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >
+                          <X size={11} />
+                        </button>
+                      </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '4px', marginLeft: '8px' }}>
-                      <button
-                        onClick={() => onCompare(friend.id)}
-                        title="Comparar"
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: '3px',
-                          padding: '5px 8px', borderRadius: '6px', border: 'none',
-                          background: 'rgba(168,85,247,0.1)', color: 'rgba(168,85,247,0.7)',
-                          fontSize: '9px', fontWeight: 600, cursor: 'pointer',
-                          fontFamily: "'Inter', sans-serif",
-                        }}
-                      >
-                        <ArrowLeftRight size={10} /> Comparar
-                      </button>
-                      <button
-                        onClick={() => removeFriend(f.id)}
-                        title="Eliminar"
-                        style={{
-                          width: 26, height: 26, borderRadius: '6px', border: 'none',
-                          background: 'rgba(239,68,68,0.06)', color: 'rgba(239,68,68,0.4)',
-                          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}
-                      >
-                        <X size={11} />
-                      </button>
-                    </div>
+                    {stats && (
+                      <>
+                        <div style={{ height: '1px', background: 'var(--bg-border)' }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Aprobadas</span>
+                            <span><strong style={{ color: 'rgba(255,255,255,0.8)' }}>{stats.approved}</strong> vs {myApproved} (vos)</span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Pendientes</span>
+                            <span><strong style={{ color: 'rgba(255,255,255,0.8)' }}>{stats.total - stats.approved}</strong> vs {myPending} (vos)</span>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Progreso</span>
+                            <span><strong style={{ color: 'rgba(255,255,255,0.8)' }}>{stats.pct}%</strong> vs {myPct}% (vos)</span>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); onCompare(friend.id); }}
+                          style={{
+                            alignSelf: 'flex-start', padding: '4px 0', border: 'none', background: 'none',
+                            fontSize: '11px', fontWeight: 600, color: '#60A5FA', cursor: 'pointer',
+                            fontFamily: "'Geist', sans-serif",
+                          }}
+                        >
+                          Ver comparación completa →
+                        </button>
+                      </>
+                    )}
                   </div>
                 );
               })}

@@ -19,22 +19,22 @@ export type SubjectNodeType = Node<SubjectNodeData, 'subject'>;
 
 const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: string; glow: string }> = {
   pending: {
-    bg: 'rgba(255,255,255,0.02)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    bg: 'var(--bg-surface)',
+    border: '1px solid var(--bg-border)',
     text: 'rgba(255,255,255,0.4)',
     glow: 'none',
   },
   final: {
-    bg: 'rgba(249,115,22,0.07)',
-    border: '1px solid rgba(249,115,22,0.4)',
-    text: 'rgba(249,115,22,0.9)',
-    glow: '0 0 16px rgba(249,115,22,0.08)',
+    bg: 'var(--status-final-bg)',
+    border: '1px solid var(--status-final-border)',
+    text: 'var(--status-final)',
+    glow: '0 0 16px rgba(251, 146, 60, 0.08)',
   },
   approved: {
-    bg: 'rgba(34,197,94,0.07)',
-    border: '1px solid rgba(34,197,94,0.35)',
-    text: 'rgba(34,197,94,0.9)',
-    glow: '0 0 16px rgba(34,197,94,0.06)',
+    bg: 'var(--status-aprobada-bg)',
+    border: '1px solid var(--status-aprobada-border)',
+    text: 'var(--status-aprobada)',
+    glow: '0 0 16px rgba(74, 222, 128, 0.06)',
   },
 };
 
@@ -81,7 +81,7 @@ export const SubjectNode: React.FC<NodeProps<SubjectNodeType>> = ({ data, id }) 
         textAlign: 'center',
         position: 'relative',
         transition: 'all 0.2s ease',
-        fontFamily: "'Inter', sans-serif",
+        fontFamily: "'Geist', sans-serif",
       }}
       onMouseEnter={(e) => {
         if (!isLocked) {
@@ -127,17 +127,17 @@ export const SubjectNode: React.FC<NodeProps<SubjectNodeType>> = ({ data, id }) 
           background: isLocked
             ? 'rgba(255,255,255,0.04)'
             : status === 'approved'
-              ? 'rgba(34,197,94,0.2)'
+              ? 'rgba(74, 222, 128, 0.15)'
               : status === 'pending'
-                ? 'rgba(59,130,246,0.1)'
-                : 'rgba(251,191,36,0.15)',
+                ? 'var(--status-regular-bg)'
+                : 'rgba(251, 146, 60, 0.15)',
           border: isLocked
             ? '1.5px solid rgba(255,255,255,0.1)'
             : status === 'approved'
-              ? '1.5px solid rgba(34,197,94,0.5)'
+              ? '1.5px solid var(--status-aprobada-border)'
               : status === 'pending'
-                ? '1.5px solid rgba(59,130,246,0.3)'
-                : '1.5px solid rgba(251,191,36,0.4)',
+                ? '1.5px solid rgba(96, 165, 250, 0.35)'
+                : '1.5px solid var(--status-final-border)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -146,10 +146,10 @@ export const SubjectNode: React.FC<NodeProps<SubjectNodeType>> = ({ data, id }) 
           color: isLocked
             ? 'rgba(255,255,255,0.25)'
             : status === 'approved'
-              ? 'rgba(34,197,94,0.9)'
+              ? 'var(--status-aprobada)'
               : status === 'pending'
-                ? 'rgba(59,130,246,0.6)'
-                : 'rgba(251,191,36,0.9)',
+                ? 'var(--status-regular)'
+                : 'var(--status-final)',
           letterSpacing: '0.5px',
         }}>
           A

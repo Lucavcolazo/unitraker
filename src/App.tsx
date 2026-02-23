@@ -17,9 +17,9 @@ export type Section = 'map' | 'stats' | 'friends' | 'settings';
 
 const SPINNER = (
   <div style={{
-    height: '100vh', background: 'rgb(8, 8, 12)',
+    height: '100vh', background: 'var(--bg-base)',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Geist', sans-serif",
   }}>
     <div style={{
       width: 32, height: 32,
@@ -34,10 +34,10 @@ const SPINNER = (
 
 const SPINNER_WITH_TEXT = (
   <div style={{
-    height: '100vh', background: 'rgb(8, 8, 12)',
+    height: '100vh', background: 'var(--bg-base)',
     display: 'flex', flexDirection: 'column',
     alignItems: 'center', justifyContent: 'center',
-    fontFamily: "'Inter', sans-serif", gap: '12px',
+    fontFamily: "'Geist', sans-serif", gap: '12px',
   }}>
     <div style={{
       width: 32, height: 32,
@@ -89,10 +89,10 @@ function LoginRoute() {
 
 const SPINNER_PREPARING = (
   <div style={{
-    height: '100vh', background: 'rgb(8, 8, 12)',
+    height: '100vh', background: 'var(--bg-base)',
     display: 'flex', flexDirection: 'column',
     alignItems: 'center', justifyContent: 'center',
-    fontFamily: "'Inter', sans-serif", gap: '12px',
+    fontFamily: "'Geist', sans-serif", gap: '12px',
   }}>
     <div style={{
       width: 32, height: 32,

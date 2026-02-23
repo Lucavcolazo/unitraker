@@ -15,10 +15,10 @@ import {
   ChevronUp,
 } from 'lucide-react';
 
-const STATUS_CONFIG: Record<SubjectStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
-  approved: { label: 'Aprobadas', color: 'rgba(34,197,94,0.9)', bg: 'rgba(34,197,94,0.08)', icon: <CheckCircle2 size={14} /> },
-  final: { label: 'Final pendiente', color: 'rgba(249,115,22,0.9)', bg: 'rgba(249,115,22,0.08)', icon: <FileText size={14} /> },
-  pending: { label: 'Pendientes', color: 'rgba(255,255,255,0.35)', bg: 'rgba(255,255,255,0.03)', icon: <BookOpen size={14} /> },
+const STATUS_CONFIG: Record<SubjectStatus, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
+  approved: { label: 'Aprobadas', color: '#4ADE80', bg: 'rgba(74, 222, 128, 0.05)', border: 'rgba(74, 222, 128, 0.35)', icon: <CheckCircle2 size={14} /> },
+  final: { label: 'Final pendiente', color: '#FB923C', bg: 'rgba(251, 146, 60, 0.05)', border: 'rgba(251, 146, 60, 0.35)', icon: <FileText size={14} /> },
+  pending: { label: 'Pendientes', color: 'rgba(255,255,255,0.35)', bg: 'var(--bg-surface)', border: 'var(--bg-border)', icon: <BookOpen size={14} /> },
 };
 
 // Animated counter
@@ -93,29 +93,29 @@ const DonutChart: React.FC<{
           />
         );
       })}
-      {/* Center text */}
+      {/* Center text — tipografía display para el porcentaje */}
       {centerValue && (
         <>
           <text
             x={size / 2}
-            y={size / 2 - 6}
+            y={size / 2 - 8}
             textAnchor="middle"
-            fill="rgba(255,255,255,0.85)"
-            fontSize="24"
+            fill="rgba(255,255,255,0.9)"
+            fontSize="30"
             fontWeight="700"
-            fontFamily="Inter, sans-serif"
+            fontFamily="Geist, sans-serif"
           >
             {centerValue}
           </text>
           {centerLabel && (
             <text
               x={size / 2}
-              y={size / 2 + 14}
+              y={size / 2 + 16}
               textAnchor="middle"
-              fill="rgba(255,255,255,0.3)"
-              fontSize="10"
+              fill="rgba(255,255,255,0.45)"
+              fontSize="12"
               fontWeight="500"
-              fontFamily="Inter, sans-serif"
+              fontFamily="Geist, sans-serif"
             >
               {centerLabel}
             </text>
@@ -193,7 +193,7 @@ const SubjectList: React.FC<{
           border: 'none',
           cursor: 'pointer',
           color: 'rgba(255,255,255,0.7)',
-          fontFamily: "'Inter', sans-serif",
+          fontFamily: "'Geist', sans-serif",
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -336,8 +336,8 @@ export const StatsPage: React.FC = () => {
   }, [subjectStates, filteredCurriculum]);
 
   const donutSegments = [
-    { value: stats.byStatus.approved.length, color: 'rgba(34,197,94,0.8)', label: 'Aprobadas' },
-    { value: stats.byStatus.final.length, color: 'rgba(249,115,22,0.8)', label: 'Final pend.' },
+    { value: stats.byStatus.approved.length, color: '#4ADE80', label: 'Aprobadas' },
+    { value: stats.byStatus.final.length, color: '#FB923C', label: 'Final pend.' },
     { value: stats.byStatus.pending.length, color: 'rgba(255,255,255,0.12)', label: 'Pendientes' },
   ];
 
@@ -346,7 +346,7 @@ export const StatsPage: React.FC = () => {
       flex: 1,
       overflow: 'auto',
       padding: '24px',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Geist', sans-serif",
     }}>
       <div style={{
         maxWidth: '1100px',
@@ -372,7 +372,7 @@ export const StatsPage: React.FC = () => {
                 transition={{ duration: 0.5, delay: delay / 1000 }}
                 style={{
                   background: config.bg,
-                  border: `1px solid ${config.color.replace('0.9', '0.15')}`,
+                  border: `1px solid ${config.border}`,
                   borderRadius: '10px',
                   padding: '16px',
                   display: 'flex',
@@ -386,7 +386,7 @@ export const StatsPage: React.FC = () => {
                     {config.label}
                   </span>
                 </div>
-                <div style={{ fontSize: '28px', fontWeight: 700, color: config.color }}>
+                <div style={{ fontSize: '34px', fontWeight: 800, color: config.color, lineHeight: 1.1 }}>
                   <AnimatedNumber value={count} delay={delay} />
                 </div>
                 <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>
@@ -556,7 +556,7 @@ export const StatsPage: React.FC = () => {
                   label={cat}
                   value={done}
                   total={total}
-                  color="rgba(34,197,94,0.6)"
+                  color="#4ADE80"
                   delay={0.5 + i * 0.05}
                 />
               ))}
@@ -569,14 +569,14 @@ export const StatsPage: React.FC = () => {
             title="Materias Aprobadas"
             subjects={stats.byStatus.approved}
             icon={<CheckCircle2 size={14} />}
-            color="rgba(34,197,94,0.9)"
+            color="#4ADE80"
             defaultOpen
           />
           <SubjectList
             title="Final Pendiente"
             subjects={stats.byStatus.final}
             icon={<FileText size={14} />}
-            color="rgba(249,115,22,0.9)"
+            color="#FB923C"
           />
           <SubjectList
             title="Pendientes"

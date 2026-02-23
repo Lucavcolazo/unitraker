@@ -10,12 +10,12 @@ export const ProximamenteView: React.FC<Props> = ({ onBack }) => {
   return (
     <div style={{
       height: '100vh',
-      background: 'rgb(8, 8, 12)',
+      background: 'var(--bg-base)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Geist', sans-serif",
       padding: '24px',
       boxSizing: 'border-box',
     }}>
@@ -36,7 +36,7 @@ export const ProximamenteView: React.FC<Props> = ({ onBack }) => {
           fontSize: '13px',
           fontWeight: 500,
           cursor: 'pointer',
-          fontFamily: "'Inter', sans-serif",
+          fontFamily: "'Geist', sans-serif",
         }}
         onMouseEnter={e => {
           e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';

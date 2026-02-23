@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import type { SubjectStatus, Subject } from '../data/curriculum';
+import { curriculum } from '../data/curriculum';
 
 interface FriendProfile {
     id: string;
@@ -39,8 +40,11 @@ interface FriendsState {
     friendProfile: FriendProfile | null;
     friendPlan: FriendPlanInfo | null;
     friendPlanSubjects: Subject[];
+    /** Cache de estadísticas por amigo (approved, final, pending, total, pct) para el mini resumen en lista */
+    friendStatsCache: Record<string, { approved: number; final: number; pending: number; total: number; pct: number }>;
 
     loadFriends: (userId: string) => Promise<void>;
+    loadFriendStats: (friendId: string) => Promise<void>;
     loadPendingRequests: (userId: string) => Promise<void>;
     searchUsers: (query: string, currentUserId: string) => Promise<void>;
     sendRequest: (senderId: string, receiverId: string) => Promise<{ error: string | null }>;
@@ -62,6 +66,66 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
     friendProfile: null,
     friendPlan: null,
     friendPlanSubjects: [],
+    friendStatsCache: {},
+
+    loadFriendStats: async (friendId: string) => {
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('id, degree_track, active_plan_id')
+            .eq('id', friendId)
+            .single();
+
+        const { data: states } = await supabase
+            .from('subject_states')
+            .select('subject_id, status')
+            .eq('user_id', friendId);
+
+        const stateMap: Record<string, SubjectStatus> = {};
+        if (states) {
+            states.forEach((row: { subject_id: string; status: string }) => {
+                stateMap[row.subject_id] = row.status as SubjectStatus;
+            });
+        }
+
+        let subjects: Subject[] = curriculum;
+        if (profile?.active_plan_id) {
+            const { data: subjectRows } = await supabase
+                .from('plan_subjects')
+                .select('subject_id, name, year, semester, is_analyst, category, correlatives')
+                .eq('plan_id', profile.active_plan_id)
+                .order('year', { ascending: true })
+                .order('semester', { ascending: true });
+            if (subjectRows?.length) {
+                subjects = subjectRows.map((row: { subject_id: string; name: string; year: number; semester: number; is_analyst: boolean; category: string; correlatives: string[] | null }) => ({
+                    id: row.subject_id,
+                    name: row.name,
+                    year: row.year,
+                    semester: row.semester,
+                    credits: 0,
+                    isAnalyst: row.is_analyst,
+                    correlatives: row.correlatives ?? [],
+                    category: row.category,
+                }));
+            }
+        }
+        const isAnalyst = profile?.degree_track === 'analista';
+        const filtered = isAnalyst ? subjects.filter(s => s.isAnalyst) : subjects;
+        const total = filtered.length;
+        let approved = 0, finalCount = 0, pending = 0;
+        filtered.forEach(s => {
+            const st = stateMap[s.id] || 'pending';
+            if (st === 'approved') approved++;
+            else if (st === 'final') finalCount++;
+            else pending++;
+        });
+        const pct = total > 0 ? Math.round((approved / total) * 100) : 0;
+        set(state => ({
+            friendStatsCache: {
+                ...state.friendStatsCache,
+                [friendId]: { approved, final: finalCount, pending, total, pct },
+            },
+        }));
+    },
 
     loadFriends: async (userId: string) => {
         set({ loading: true });

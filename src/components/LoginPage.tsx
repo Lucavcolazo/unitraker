@@ -49,7 +49,7 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
     background: 'rgba(255,255,255,0.03)',
     color: 'rgba(255,255,255,0.85)',
     fontSize: '13px',
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Geist', sans-serif",
     outline: 'none',
     transition: 'border-color 0.2s ease',
   };
@@ -57,12 +57,12 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'rgb(8, 8, 12)',
+      background: 'var(--bg-base)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Geist', sans-serif",
       padding: '24px',
       position: 'relative',
     }}>
@@ -82,7 +82,7 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
           fontSize: '12px',
           fontWeight: 500,
           cursor: 'pointer',
-          fontFamily: "'Inter', sans-serif",
+          fontFamily: "'Geist', sans-serif",
           transition: 'color 0.2s',
         }}
         onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
@@ -151,7 +151,7 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
             color: 'rgba(255,255,255,0.7)',
             fontSize: '13px',
             fontWeight: 600,
-            fontFamily: "'Inter', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             cursor: 'pointer',
             transition: 'all 0.2s ease',
           }}
@@ -289,7 +289,7 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
               color: 'white',
               fontSize: '13px',
               fontWeight: 700,
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               cursor: loading ? 'wait' : 'pointer',
               opacity: loading ? 0.7 : 1,
               transition: 'all 0.2s ease',
@@ -320,7 +320,7 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
               fontSize: '12px',
               fontWeight: 600,
               cursor: 'pointer',
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'Geist', sans-serif",
             }}
           >
             {mode === 'login' ? 'Creá una' : 'Iniciá sesión'}

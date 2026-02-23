@@ -26,11 +26,11 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
   return (
     <div style={{
       height: '100vh',
-      background: 'rgb(8, 8, 12)',
+      background: 'var(--bg-base)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Geist', sans-serif",
     }}>
       {/* Background glow */}
       <div style={{
@@ -106,7 +106,7 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
               alignItems: 'center',
               gap: '14px',
               transition: 'all 0.2s ease',
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'Geist', sans-serif",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.4)'; e.currentTarget.style.background = 'rgba(59,130,246,0.08)'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.2)'; e.currentTarget.style.background = 'rgba(59,130,246,0.05)'; }}
@@ -150,7 +150,7 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
               alignItems: 'center',
               gap: '14px',
               transition: 'all 0.2s ease',
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'Geist', sans-serif",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(168,85,247,0.3)'; e.currentTarget.style.background = 'rgba(168,85,247,0.06)'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(168,85,247,0.15)'; e.currentTarget.style.background = 'rgba(168,85,247,0.03)'; }}

@@ -17,12 +17,12 @@ export const WelcomePage: React.FC<Props> = ({ onGetStarted }) => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'rgb(8, 8, 12)',
+      background: 'var(--bg-base)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Geist', sans-serif",
       padding: '24px',
       position: 'relative',
       overflow: 'hidden',
@@ -144,7 +144,7 @@ export const WelcomePage: React.FC<Props> = ({ onGetStarted }) => {
             color: 'white',
             fontSize: '14px',
             fontWeight: 700,
-            fontFamily: "'Inter', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             cursor: 'pointer',
             transition: 'all 0.2s ease',
             boxShadow: '0 0 20px rgba(59,130,246,0.2)',

@@ -122,7 +122,7 @@ export const PlanEditor: React.FC<Props> = ({ onComplete, onBack }) => {
     background: 'rgba(255,255,255,0.03)',
     color: 'rgba(255,255,255,0.85)',
     fontSize: '12px',
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Geist', sans-serif",
     outline: 'none',
     appearance: 'none',
     cursor: 'pointer',
@@ -136,10 +136,10 @@ export const PlanEditor: React.FC<Props> = ({ onComplete, onBack }) => {
   return (
     <div style={{
       height: '100vh',
-      background: 'rgb(8, 8, 12)',
+      background: 'var(--bg-base)',
       display: 'flex',
       flexDirection: 'column',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Geist', sans-serif",
       overflow: 'hidden',
     }}>
       {/* Header */}
@@ -180,7 +180,7 @@ export const PlanEditor: React.FC<Props> = ({ onComplete, onBack }) => {
             color: subjects.length > 0 && planName.trim()
               ? 'white'
               : 'rgba(255,255,255,0.2)',
-            fontSize: '12px', fontWeight: 700, fontFamily: "'Inter', sans-serif",
+            fontSize: '12px', fontWeight: 700, fontFamily: "'Geist', sans-serif",
             cursor: subjects.length > 0 && planName.trim() ? 'pointer' : 'not-allowed',
           }}
         >
@@ -423,7 +423,7 @@ export const PlanEditor: React.FC<Props> = ({ onComplete, onBack }) => {
                               background: newCorrelatives.includes(s.subject_id) ? 'rgba(59,130,246,0.1)' : 'rgba(255,255,255,0.02)',
                               color: newCorrelatives.includes(s.subject_id) ? 'rgba(59,130,246,0.8)' : 'rgba(255,255,255,0.35)',
                               fontSize: '9px', fontWeight: 500, cursor: 'pointer',
-                              fontFamily: "'Inter', sans-serif",
+                              fontFamily: "'Geist', sans-serif",
                             }}
                           >
                             {s.name}
@@ -442,7 +442,7 @@ export const PlanEditor: React.FC<Props> = ({ onComplete, onBack }) => {
                       background: canAddSubject ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.03)',
                       color: canAddSubject ? 'rgba(59,130,246,0.8)' : 'rgba(255,255,255,0.15)',
                       fontSize: '11px', fontWeight: 600, cursor: canAddSubject ? 'pointer' : 'not-allowed',
-                      fontFamily: "'Inter', sans-serif",
+                      fontFamily: "'Geist', sans-serif",
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px',
                     }}
                   >
@@ -465,7 +465,7 @@ export const PlanEditor: React.FC<Props> = ({ onComplete, onBack }) => {
                 fontSize: '12px', fontWeight: 600,
                 cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                fontFamily: "'Inter', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 transition: 'all 0.2s ease',
               }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'; e.currentTarget.style.color = 'rgba(59,130,246,0.7)'; }}
