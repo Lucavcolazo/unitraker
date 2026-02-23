@@ -60,34 +60,33 @@ export const usePlanStore = create<PlanState>((set, get) => ({
 
     loadUserPlans: async (userId: string) => {
         set({ loading: true });
+        try {
+            const { data: ownPlans } = await supabase
+                .from('curriculum_plans')
+                .select('*')
+                .or(`creator_id.eq.${userId},is_default.eq.true`);
 
-        // Get user's plans (created or default)
-        const { data: ownPlans } = await supabase
-            .from('curriculum_plans')
-            .select('*')
-            .or(`creator_id.eq.${userId},is_default.eq.true`);
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('active_plan_id')
+                .eq('id', userId)
+                .single();
 
-        // Get active plan id from profile
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('active_plan_id')
-            .eq('id', userId)
-            .single();
+            const plans = (ownPlans || []) as CurriculumPlan[];
+            let activePlanId = profile?.active_plan_id ?? null;
 
-        const plans = (ownPlans || []) as CurriculumPlan[];
-        let activePlanId = profile?.active_plan_id ?? null;
+            if (activePlanId === null && get().activePlanId) {
+                const currentId = get().activePlanId;
+                if (plans.some(p => p.id === currentId)) activePlanId = currentId;
+            }
 
-        // Si el perfil no tiene plan pero en memoria ya tenemos uno válido (ej. recién creado), no pisarlo
-        if (activePlanId === null && get().activePlanId) {
-            const currentId = get().activePlanId;
-            if (plans.some(p => p.id === currentId)) activePlanId = currentId;
-        }
+            set({ plans, activePlanId });
 
-        set({ plans, activePlanId, loading: false });
-
-        // If has active plan, load its subjects
-        if (activePlanId) {
-            get().loadPlanSubjects(activePlanId);
+            if (activePlanId) {
+                await get().loadPlanSubjects(activePlanId);
+            }
+        } finally {
+            set({ loading: false });
         }
     },
 

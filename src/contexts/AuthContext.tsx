@@ -42,16 +42,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    // Get initial session
+    let cancelled = false;
+    const AUTH_TIMEOUT_MS = 10000;
+
+    const timeoutId = setTimeout(() => {
+      if (cancelled) return;
+      setLoading(false);
+    }, AUTH_TIMEOUT_MS);
+
     supabase.auth.getSession().then(({ data: { session: s } }) => {
+      if (cancelled) return;
+      clearTimeout(timeoutId);
       setSession(s);
       setUser(s?.user ?? null);
       if (s?.user) fetchProfile(s.user.id);
       setLoading(false);
+    }).catch(() => {
+      if (cancelled) return;
+      clearTimeout(timeoutId);
+      setLoading(false);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
+      if (cancelled) return;
+      clearTimeout(timeoutId);
       setSession(s);
       setUser(s?.user ?? null);
       if (s?.user) {
@@ -62,7 +76,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signInWithEmail = async (email: string, password: string) => {

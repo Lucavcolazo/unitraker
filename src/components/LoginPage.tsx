@@ -3,6 +3,14 @@ import { GraduationCap, Mail, Github, ArrowLeft, Eye, EyeOff, Loader2, User } fr
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 
+const PASSWORD_MIN_LENGTH = 8;
+const PASSWORD_NEEDS_UPPERCASE = /[A-Z]/;
+
+/** La contraseña debe tener al menos 8 caracteres y una mayúscula. */
+function meetsPasswordRequirements(p: string): boolean {
+  return p.length >= PASSWORD_MIN_LENGTH && PASSWORD_NEEDS_UPPERCASE.test(p);
+}
+
 interface Props {
   onBack: () => void;
 }
@@ -18,6 +26,14 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const passwordValid = meetsPasswordRequirements(password);
+  const passwordTouched = password.length > 0;
+  const passwordBorderColor = !passwordTouched
+    ? 'rgba(255,255,255,0.08)'
+    : passwordValid
+      ? 'rgba(74, 222, 128, 0.5)'
+      : 'rgba(239, 68, 68, 0.5)';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -29,10 +45,19 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
         const { error: err } = await signInWithEmail(email, password);
         if (err) setError(err.message);
       } else {
-        if (!name.trim()) { setError('Ingresá tu nombre'); setLoading(false); return; }
+        if (!name.trim()) {
+          setError('Ingresá tu nombre');
+          setLoading(false);
+          return;
+        }
+        if (!meetsPasswordRequirements(password)) {
+          setError('La contraseña debe tener al menos 8 caracteres y una mayúscula');
+          setLoading(false);
+          return;
+        }
         const { error: err } = await signUpWithEmail(email, password, name);
         if (err) setError(err.message);
-        else setSuccess('Revisá tu email para confirmar tu cuenta');
+        else setSuccess('Cuenta creada. Ya podés iniciar sesión con tu email y contraseña.');
       }
     } catch {
       setError('Ocurrió un error inesperado');
@@ -233,10 +258,12 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
-              minLength={6}
-              style={{ ...inputStyle, paddingRight: '36px' }}
-              onFocus={e => e.currentTarget.style.borderColor = 'rgba(59,130,246,0.4)'}
-              onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+              minLength={PASSWORD_MIN_LENGTH}
+              style={{
+                ...inputStyle,
+                paddingRight: '36px',
+                borderColor: passwordBorderColor,
+              }}
             />
             <button
               type="button"
@@ -249,6 +276,11 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
             >
               {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
             </button>
+            {mode === 'signup' && (
+              <p style={{ margin: '4px 0 0', fontSize: '10px', color: 'rgba(255,255,255,0.35)' }}>
+                Mín. 8 caracteres y una mayúscula
+              </p>
+            )}
           </div>
 
           {error && (
@@ -279,7 +311,7 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || (mode === 'signup' && !meetsPasswordRequirements(password))}
             style={{
               width: '100%',
               padding: '10px',
@@ -290,8 +322,8 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
               fontSize: '13px',
               fontWeight: 700,
               fontFamily: "'Geist', sans-serif",
-              cursor: loading ? 'wait' : 'pointer',
-              opacity: loading ? 0.7 : 1,
+              cursor: loading || (mode === 'signup' && !passwordValid) ? 'not-allowed' : 'pointer',
+              opacity: loading || (mode === 'signup' && !passwordValid) ? 0.7 : 1,
               transition: 'all 0.2s ease',
               display: 'flex',
               alignItems: 'center',
