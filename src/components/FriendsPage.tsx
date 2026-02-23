@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriendsStore } from '../store/useFriendsStore';
-import { curriculum, type SubjectStatus } from '../data/curriculum';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, UserPlus, Check, X, Users, ChevronRight,

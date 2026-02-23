@@ -1,11 +1,11 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useStudyStore } from '../store/useStudyStore';
 import { useAuth } from '../contexts/AuthContext';
+import { usePlanStore } from '../store/usePlanStore';
 import { curriculum, type SubjectStatus } from '../data/curriculum';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   CheckCircle2,
-  Clock,
   FileText,
   BookOpen,
   Award,
@@ -18,7 +18,6 @@ import {
 const STATUS_CONFIG: Record<SubjectStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
   approved: { label: 'Aprobadas', color: 'rgba(34,197,94,0.9)', bg: 'rgba(34,197,94,0.08)', icon: <CheckCircle2 size={14} /> },
   final: { label: 'Final pendiente', color: 'rgba(249,115,22,0.9)', bg: 'rgba(249,115,22,0.08)', icon: <FileText size={14} /> },
-  regular: { label: 'Regulares', color: 'rgba(251,191,36,0.9)', bg: 'rgba(251,191,36,0.08)', icon: <Clock size={14} /> },
   pending: { label: 'Pendientes', color: 'rgba(255,255,255,0.35)', bg: 'rgba(255,255,255,0.03)', icon: <BookOpen size={14} /> },
 };
 
@@ -278,19 +277,21 @@ const SubjectList: React.FC<{
 export const StatsPage: React.FC = () => {
   const { subjectStates } = useStudyStore();
   const { profile } = useAuth();
+  const { activePlanSubjects } = usePlanStore();
+
+  const baseCurriculum = activePlanSubjects.length > 0 ? activePlanSubjects : curriculum;
 
   const filteredCurriculum = useMemo(() => {
     if (profile?.degree_track === 'analista') {
-      return curriculum.filter(s => s.isAnalyst);
+      return baseCurriculum.filter(s => s.isAnalyst);
     }
-    return curriculum;
-  }, [profile?.degree_track]);
+    return baseCurriculum;
+  }, [profile?.degree_track, baseCurriculum]);
 
   const stats = useMemo(() => {
     const byStatus: Record<SubjectStatus, typeof curriculum> = {
       approved: [],
       final: [],
-      regular: [],
       pending: [],
     };
 
@@ -336,8 +337,7 @@ export const StatsPage: React.FC = () => {
 
   const donutSegments = [
     { value: stats.byStatus.approved.length, color: 'rgba(34,197,94,0.8)', label: 'Aprobadas' },
-    { value: stats.byStatus.final.length, color: 'rgba(249,115,22,0.8)', label: 'Final' },
-    { value: stats.byStatus.regular.length, color: 'rgba(251,191,36,0.8)', label: 'Regulares' },
+    { value: stats.byStatus.final.length, color: 'rgba(249,115,22,0.8)', label: 'Final pend.' },
     { value: stats.byStatus.pending.length, color: 'rgba(255,255,255,0.12)', label: 'Pendientes' },
   ];
 
@@ -360,8 +360,7 @@ export const StatsPage: React.FC = () => {
           {([
             { status: 'approved' as SubjectStatus, delay: 0 },
             { status: 'final' as SubjectStatus, delay: 100 },
-            { status: 'regular' as SubjectStatus, delay: 200 },
-            { status: 'pending' as SubjectStatus, delay: 300 },
+            { status: 'pending' as SubjectStatus, delay: 200 },
           ]).map(({ status, delay }) => {
             const config = STATUS_CONFIG[status];
             const count = stats.byStatus[status].length;
@@ -495,15 +494,6 @@ export const StatsPage: React.FC = () => {
                   color="rgba(59,130,246,0.7)"
                   delay={0.5}
                 />
-                <div style={{ marginTop: '8px' }}>
-                  <HorizontalBar
-                    label="Créditos"
-                    value={stats.analystCreditsEarned}
-                    total={stats.analystCreditsTotal}
-                    color="rgba(59,130,246,0.5)"
-                    delay={0.6}
-                  />
-                </div>
               </div>
 
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: '16px' }}>
@@ -522,15 +512,6 @@ export const StatsPage: React.FC = () => {
                   color="rgba(168,85,247,0.7)"
                   delay={0.7}
                 />
-                <div style={{ marginTop: '8px' }}>
-                  <HorizontalBar
-                    label="Créditos"
-                    value={stats.engCreditsEarned}
-                    total={stats.engCreditsTotal}
-                    color="rgba(168,85,247,0.5)"
-                    delay={0.8}
-                  />
-                </div>
               </div>
             </div>
           </motion.div>
@@ -598,22 +579,10 @@ export const StatsPage: React.FC = () => {
             color="rgba(249,115,22,0.9)"
           />
           <SubjectList
-            title="Regulares"
-            subjects={stats.byStatus.regular}
-            icon={<Clock size={14} />}
-            color="rgba(251,191,36,0.9)"
-          />
-          <SubjectList
-            title="Faltan para Analista"
-            subjects={stats.analystRemaining}
-            icon={<Award size={14} />}
-            color="rgba(59,130,246,0.9)"
-          />
-          <SubjectList
-            title="Faltan para Ingeniería"
-            subjects={stats.engRemaining}
-            icon={<Award size={14} />}
-            color="rgba(168,85,247,0.9)"
+            title="Pendientes"
+            subjects={stats.byStatus.pending}
+            icon={<BookOpen size={14} />}
+            color="rgba(255,255,255,0.35)"
           />
         </div>
       </div>

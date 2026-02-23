@@ -13,8 +13,7 @@ interface StudyState {
 }
 
 const STATUS_CYCLE: Record<SubjectStatus, SubjectStatus> = {
-    pending: 'regular',
-    regular: 'final',
+    pending: 'final',
     final: 'approved',
     approved: 'pending',
 };

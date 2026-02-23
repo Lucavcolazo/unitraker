@@ -18,7 +18,7 @@ CREATE TABLE public.subject_states (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
   subject_id TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'regular', 'final', 'approved')),
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'final', 'approved')),
   updated_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE(user_id, subject_id)
 );

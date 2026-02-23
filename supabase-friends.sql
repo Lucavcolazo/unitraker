@@ -7,7 +7,8 @@
 ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS degree_track TEXT DEFAULT 'ingeniero' CHECK (degree_track IN ('analista', 'ingeniero')),
   ADD COLUMN IF NOT EXISTS profile_color TEXT DEFAULT '#3b82f6',
-  ADD COLUMN IF NOT EXISTS profile_icon TEXT DEFAULT 'User';
+  ADD COLUMN IF NOT EXISTS profile_icon TEXT DEFAULT 'User',
+  ADD COLUMN IF NOT EXISTS profile_subtitle TEXT;
 
 -- 2. Friendships table
 CREATE TABLE IF NOT EXISTS public.friendships (
@@ -73,3 +74,9 @@ CREATE POLICY "Friends can view each other states"
 CREATE POLICY "Users can search other profiles"
   ON public.profiles FOR SELECT
   USING (true);
+
+-- 7. Permitir que el usuario cree su propio perfil si no existe (ej. trigger no corrió al registrarse)
+DROP POLICY IF EXISTS "Users can insert own profile" ON public.profiles;
+CREATE POLICY "Users can insert own profile"
+  ON public.profiles FOR INSERT
+  WITH CHECK (auth.uid() = id);

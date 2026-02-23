@@ -24,12 +24,6 @@ const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: st
     text: 'rgba(255,255,255,0.4)',
     glow: 'none',
   },
-  regular: {
-    bg: 'rgba(251,191,36,0.07)',
-    border: '1px solid rgba(251,191,36,0.35)',
-    text: 'rgba(251,191,36,0.9)',
-    glow: '0 0 16px rgba(251,191,36,0.06)',
-  },
   final: {
     bg: 'rgba(249,115,22,0.07)',
     border: '1px solid rgba(249,115,22,0.4)',
@@ -46,7 +40,6 @@ const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: st
 
 const statusLabel: Record<SubjectStatus, string> = {
   pending: '',
-  regular: 'Regular',
   final: 'Final',
   approved: 'Aprobada',
 };

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
-import type { SubjectStatus } from '../data/curriculum';
+import type { SubjectStatus, Subject } from '../data/curriculum';
 
 interface FriendProfile {
     id: string;
@@ -9,6 +9,14 @@ interface FriendProfile {
     profile_color: string;
     profile_icon: string;
     degree_track: string;
+    profile_subtitle?: string | null;
+    active_plan_id?: string | null;
+}
+
+export interface FriendPlanInfo {
+    id: string;
+    name: string;
+    is_public: boolean;
 }
 
 interface Friendship {
@@ -29,6 +37,8 @@ interface FriendsState {
     searching: boolean;
     friendStates: Record<string, SubjectStatus>;
     friendProfile: FriendProfile | null;
+    friendPlan: FriendPlanInfo | null;
+    friendPlanSubjects: Subject[];
 
     loadFriends: (userId: string) => Promise<void>;
     loadPendingRequests: (userId: string) => Promise<void>;
@@ -50,6 +60,8 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
     searching: false,
     friendStates: {},
     friendProfile: null,
+    friendPlan: null,
+    friendPlanSubjects: [],
 
     loadFriends: async (userId: string) => {
         set({ loading: true });
@@ -161,14 +173,14 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
     },
 
     loadFriendStates: async (friendId: string) => {
-        // Load profile
+        // Load profile (incluye active_plan_id para saber el plan del amigo)
         const { data: profile } = await supabase
             .from('profiles')
-            .select('id, display_name, avatar_url, profile_color, profile_icon, degree_track')
+            .select('id, display_name, avatar_url, profile_color, profile_icon, degree_track, profile_subtitle, active_plan_id')
             .eq('id', friendId)
             .single();
 
-        // Load states
+        // Load subject states
         const { data: states } = await supabase
             .from('subject_states')
             .select('subject_id, status')
@@ -181,12 +193,49 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
             });
         }
 
+        let friendPlan: FriendPlanInfo | null = null;
+        let friendPlanSubjects: Subject[] = [];
+
+        if (profile?.active_plan_id) {
+            const { data: planRow } = await supabase
+                .from('curriculum_plans')
+                .select('id, name, is_public')
+                .eq('id', profile.active_plan_id)
+                .single();
+
+            if (planRow) {
+                friendPlan = { id: planRow.id, name: planRow.name, is_public: planRow.is_public ?? false };
+
+                const { data: subjectRows } = await supabase
+                    .from('plan_subjects')
+                    .select('subject_id, name, year, semester, is_analyst, category, correlatives')
+                    .eq('plan_id', planRow.id)
+                    .order('year', { ascending: true })
+                    .order('semester', { ascending: true });
+
+                if (subjectRows) {
+                    friendPlanSubjects = subjectRows.map((row: { subject_id: string; name: string; year: number; semester: number; is_analyst: boolean; category: string; correlatives: string[] | null }) => ({
+                        id: row.subject_id,
+                        name: row.name,
+                        year: row.year,
+                        semester: row.semester,
+                        credits: 0,
+                        isAnalyst: row.is_analyst,
+                        correlatives: row.correlatives ?? [],
+                        category: row.category,
+                    }));
+                }
+            }
+        }
+
         set({
             friendStates: stateMap,
             friendProfile: profile as FriendProfile | null,
+            friendPlan,
+            friendPlanSubjects,
         });
     },
 
     clearSearch: () => set({ searchResults: [] }),
-    clearFriendView: () => set({ friendStates: {}, friendProfile: null }),
+    clearFriendView: () => set({ friendStates: {}, friendProfile: null, friendPlan: null, friendPlanSubjects: [] }),
 }));

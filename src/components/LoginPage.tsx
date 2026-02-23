@@ -125,14 +125,14 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
           color: 'rgba(255,255,255,0.9)',
           margin: '0 0 6px',
         }}>
-          {mode === 'login' ? 'Iniciá sesión' : 'Creá tu cuenta'}
+          ¿Cómo querés iniciar sesión?
         </h2>
         <p style={{
           fontSize: '12px',
           color: 'rgba(255,255,255,0.3)',
           margin: '0 0 28px',
         }}>
-          {mode === 'login' ? 'Accedé a tu mapa curricular' : 'Empezá a trackear tu progreso'}
+          {mode === 'login' ? 'Accedé a tu mapa curricular' : 'Creá tu cuenta para empezar'}
         </p>
 
         {/* GitHub button */}

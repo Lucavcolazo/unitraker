@@ -6,7 +6,8 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  profile: { display_name: string; avatar_url: string | null; curriculum_id: string; degree_track: string; profile_color: string; profile_icon: string } | null;
+  profile: { display_name: string; avatar_url: string | null; curriculum_id: string; degree_track: string; profile_color: string; profile_icon: string; profile_subtitle: string | null } | null;
+  refreshProfile: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUpWithEmail: (email: string, password: string, name: string) => Promise<{ error: Error | null }>;
   signInWithGitHub: () => Promise<void>;
@@ -31,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchProfile = async (userId: string) => {
     const { data } = await supabase
       .from('profiles')
-      .select('display_name, avatar_url, curriculum_id, degree_track, profile_color, profile_icon')
+      .select('display_name, avatar_url, curriculum_id, degree_track, profile_color, profile_icon, profile_subtitle')
       .eq('id', userId)
       .single();
 
@@ -90,9 +91,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setProfile(null);
   };
 
+  const refreshProfile = async () => {
+    if (user) await fetchProfile(user.id);
+  };
+
   return (
     <AuthContext.Provider value={{
-      user, session, loading, profile,
+      user, session, loading, profile, refreshProfile,
       signInWithEmail, signUpWithEmail, signInWithGitHub, signOut,
     }}>
       {children}

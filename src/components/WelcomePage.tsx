@@ -81,7 +81,7 @@ export const WelcomePage: React.FC<Props> = ({ onGetStarted }) => {
           margin: '0 0 8px',
           letterSpacing: '-0.02em',
         }}>
-          UniTraker
+          Bienvenido a UniTraker
         </h1>
 
         <p style={{
@@ -91,7 +91,7 @@ export const WelcomePage: React.FC<Props> = ({ onGetStarted }) => {
           lineHeight: 1.6,
         }}>
           Tu mapa curricular inteligente. Seguí tu progreso,<br />
-          desbloqueá materias y llegá al título.
+          desbloqueá materias y llegá al título. Creá una cuenta o iniciá sesión para empezar.
         </p>
 
         {/* Features grid */}
@@ -155,6 +155,9 @@ export const WelcomePage: React.FC<Props> = ({ onGetStarted }) => {
           Comenzar
           <ArrowRight size={16} />
         </motion.button>
+        <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '16px' }}>
+          Sin cuenta solo podés ver esta bienvenida.
+        </p>
       </motion.div>
     </div>
   );

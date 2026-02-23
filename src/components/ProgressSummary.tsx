@@ -1,23 +1,25 @@
 import React from 'react';
 import { useStudyStore } from '../store/useStudyStore';
+import { usePlanStore } from '../store/usePlanStore';
 import { curriculum } from '../data/curriculum';
 
 export const ProgressSummary: React.FC = () => {
   const { subjectStates, resetAll } = useStudyStore();
+  const { activePlanSubjects } = usePlanStore();
+  const base = activePlanSubjects.length > 0 ? activePlanSubjects : curriculum;
 
-  const analystSubjects = curriculum.filter(s => s.isAnalyst);
-  const allSubjects = curriculum;
+  const analystSubjects = base.filter(s => s.isAnalyst);
+  const allSubjects = base;
 
   const countByStatus = (subjects: typeof curriculum) => {
-    let approved = 0, regular = 0, finalState = 0, pending = 0;
+    let approved = 0, finalState = 0, pending = 0;
     subjects.forEach(s => {
       const st = subjectStates[s.id] || 'pending';
       if (st === 'approved') approved++;
-      else if (st === 'regular') regular++;
       else if (st === 'final') finalState++;
       else pending++;
     });
-    return { approved, regular, final: finalState, pending, total: subjects.length };
+    return { approved, final: finalState, pending, total: subjects.length };
   };
 
   const analystStats = countByStatus(analystSubjects);

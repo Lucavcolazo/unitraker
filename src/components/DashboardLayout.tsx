@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ProgressSummary } from './ProgressSummary';
-import { Map, BarChart3, Users, Settings, User } from 'lucide-react';
+import { Map, BarChart3, Users, Settings, User, ChevronDown } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriendsStore } from '../store/useFriendsStore';
+import { usePlanStore } from '../store/usePlanStore';
+import { supabase } from '../lib/supabase';
 import type { Section } from '../App';
 import {
   Star, Heart, Zap, Shield, Flame, Sun, Moon, Cloud,
@@ -26,14 +28,46 @@ interface Props {
 
 export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionChange }) => {
   const { profile, user } = useAuth();
-  const { pendingRequests, loadPendingRequests } = useFriendsStore();
+  const { pendingRequests, loadPendingRequests, loadFriends } = useFriendsStore();
+  const { plans, activePlanId, setActivePlan } = usePlanStore();
   const [pendingCount, setPendingCount] = useState(0);
+
+  const showPlanSelector = (section === 'map' || section === 'stats') && plans.length > 1 && user;
 
   useEffect(() => {
     if (user) {
       loadPendingRequests(user.id);
+      loadFriends(user.id);
     }
-  }, [user, loadPendingRequests]);
+  }, [user, loadPendingRequests, loadFriends]);
+
+  // Realtime: actualizar solicitudes y amigos al instante cuando cambia friendships
+  useEffect(() => {
+    if (!user) return;
+    const userId = user.id;
+    const channel = supabase
+      .channel('friendships-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'friendships', filter: `receiver_id=eq.${userId}` },
+        () => {
+          loadPendingRequests(userId);
+          loadFriends(userId);
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'friendships', filter: `sender_id=eq.${userId}` },
+        () => {
+          loadPendingRequests(userId);
+          loadFriends(userId);
+        }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, loadPendingRequests, loadFriends]);
 
   useEffect(() => {
     setPendingCount(pendingRequests.length);
@@ -72,7 +106,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
         zIndex: 10,
         flexShrink: 0,
       }}>
-        {/* Left: Logo + Title */}
+        {/* Left: Logo + Title + Plan selector */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{
             width: 30,
@@ -100,6 +134,35 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
               {profile?.degree_track === 'analista' ? 'Analista en Sistemas' : 'Ingeniería en Sistemas'}
             </p>
           </div>
+          {showPlanSelector && (
+            <div style={{ position: 'relative' }}>
+              <select
+                value={activePlanId ?? ''}
+                onChange={e => {
+                  const id = e.target.value;
+                  if (id && user) setActivePlan(id, user.id);
+                }}
+                style={{
+                  padding: '6px 28px 6px 10px',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'rgba(255,255,255,0.03)',
+                  color: 'rgba(255,255,255,0.85)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  fontFamily: "'Inter', sans-serif",
+                  outline: 'none',
+                  cursor: 'pointer',
+                  appearance: 'none',
+                }}
+              >
+                {plans.map(p => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
+              <ChevronDown size={12} style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)', pointerEvents: 'none' }} />
+            </div>
+          )}
         </div>
 
         {/* Center: Section Tabs */}
@@ -163,7 +226,6 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
           }}>
             {[
               { label: 'Pendiente', color: 'rgba(255,255,255,0.2)', bg: 'rgba(255,255,255,0.04)' },
-              { label: 'Regular', color: 'rgba(251,191,36,0.8)', bg: 'rgba(251,191,36,0.1)' },
               { label: 'Final', color: 'rgba(249,115,22,0.8)', bg: 'rgba(249,115,22,0.1)' },
               { label: 'Aprobada', color: 'rgba(34,197,94,0.8)', bg: 'rgba(34,197,94,0.1)' },
             ].map(({ label, color, bg }) => (
@@ -211,6 +273,10 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
 
       {/* Progress Summary — only on map */}
       {section === 'map' && <ProgressSummary />}
+
+      <style>{`
+        select option { background: rgb(20, 20, 28); color: rgba(255,255,255,0.85); }
+      `}</style>
 
       {/* Main Content */}
       <main style={{

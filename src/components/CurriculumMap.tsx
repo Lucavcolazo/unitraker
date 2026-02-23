@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useStudyStore } from '../store/useStudyStore';
 import { useAuth } from '../contexts/AuthContext';
+import { usePlanStore } from '../store/usePlanStore';
 import { curriculum, type SubjectStatus } from '../data/curriculum';
 import { Lock, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -12,12 +13,6 @@ const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: st
     border: '1px solid rgba(255,255,255,0.08)',
     text: 'rgba(255,255,255,0.4)',
     glow: 'none',
-  },
-  regular: {
-    bg: 'rgba(251,191,36,0.07)',
-    border: '1px solid rgba(251,191,36,0.35)',
-    text: 'rgba(251,191,36,0.9)',
-    glow: '0 0 16px rgba(251,191,36,0.06)',
   },
   final: {
     bg: 'rgba(249,115,22,0.07)',
@@ -35,7 +30,6 @@ const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: st
 
 const statusLabel: Record<SubjectStatus, string> = {
   pending: '',
-  regular: 'Regular',
   final: 'Final',
   approved: 'Aprobada',
 };
@@ -44,12 +38,11 @@ const statusLabel: Record<SubjectStatus, string> = {
 const SubjectCard: React.FC<{
   id: string;
   name: string;
-  credits: number;
   isAnalyst: boolean;
   status: SubjectStatus;
   isLocked: boolean;
   cardRef: (el: HTMLDivElement | null) => void;
-}> = ({ id, name, credits, isAnalyst, status, isLocked, cardRef }) => {
+}> = ({ id, name, isAnalyst, status, isLocked, cardRef }) => {
   const toggleSubjectState = useStudyStore((state) => state.toggleSubjectState);
   const style = statusStyles[status];
 
@@ -151,7 +144,7 @@ const SubjectCard: React.FC<{
         {name}
       </div>
 
-      {/* Status + Credits */}
+      {/* Status */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -168,7 +161,6 @@ const SubjectCard: React.FC<{
         ) : statusLabel[status] ? (
           <span style={{ color: style.text }}>{statusLabel[status]}</span>
         ) : null}
-        <span>{credits} cred.</span>
       </div>
     </motion.div>
   );
@@ -204,7 +196,7 @@ const SemesterRow: React.FC<{
               key={sub.id}
               id={sub.id}
               name={sub.name}
-              credits={sub.credits}
+
               isAnalyst={sub.isAnalyst}
               status={subjectStates[sub.id] || 'pending'}
               isLocked={isLocked}
@@ -257,14 +249,18 @@ export const CurriculumMap: React.FC = () => {
   const [svgSize, setSvgSize] = useState({ width: 0, height: 0 });
 
   const { profile } = useAuth();
+  const { activePlanSubjects } = usePlanStore();
+
+  // Use dynamic plan subjects if available, otherwise static curriculum
+  const baseCurriculum = activePlanSubjects.length > 0 ? activePlanSubjects : curriculum;
 
   // Filter subjects by degree track
   const filteredCurriculum = useMemo(() => {
     if (profile?.degree_track === 'analista') {
-      return curriculum.filter(s => s.isAnalyst);
+      return baseCurriculum.filter(s => s.isAnalyst);
     }
-    return curriculum;
-  }, [profile?.degree_track]);
+    return baseCurriculum;
+  }, [profile?.degree_track, baseCurriculum]);
 
   // Group subjects by year-semester
   const groups: Record<string, typeof curriculum> = {};
