@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriendsStore } from '../store/useFriendsStore';
-import { useStudyStore } from '../store/useStudyStore';
-import { usePlanStore } from '../store/usePlanStore';
-import { curriculum } from '../data/curriculum';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, UserPlus, Check, X, Users, ChevronRight,
@@ -34,20 +31,12 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
     friends, pendingRequests, searchResults, searching, loading,
     loadFriends, loadPendingRequests, searchUsers,
     sendRequest, acceptRequest, rejectRequest, removeFriend, clearSearch,
-    friendStatsCache, loadFriendStats,
+    loadFriendStats,
   } = useFriendsStore();
-  const { subjectStates } = useStudyStore();
-  const { activePlanSubjects } = usePlanStore();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [sendingTo, setSendingTo] = useState<string | null>(null);
   const [sentMessage, setSentMessage] = useState('');
-
-  const base = activePlanSubjects.length > 0 ? activePlanSubjects : curriculum;
-  const myApproved = base.filter(s => subjectStates[s.id] === 'approved').length;
-  const myTotal = base.length;
-  const myPending = myTotal - myApproved;
-  const myPct = myTotal > 0 ? Math.round((myApproved / myTotal) * 100) : 0;
 
   useEffect(() => {
     if (user) {
@@ -333,7 +322,6 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
               {friends.map(f => {
                 const friend = getFriendFromFriendship(f);
                 if (!friend) return null;
-                const stats = friendStatsCache[friend.id];
 
                 return (
                   <div
@@ -395,37 +383,6 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
                         </button>
                       </div>
                     </div>
-
-                    {stats && (
-                      <>
-                        <div style={{ height: '1px', background: 'var(--bg-border)' }} />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span>Aprobadas</span>
-                            <span><strong style={{ color: 'rgba(255,255,255,0.8)' }}>{stats.approved}</strong> vs {myApproved} (vos)</span>
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span>Pendientes</span>
-                            <span><strong style={{ color: 'rgba(255,255,255,0.8)' }}>{stats.total - stats.approved}</strong> vs {myPending} (vos)</span>
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span>Progreso</span>
-                            <span><strong style={{ color: 'rgba(255,255,255,0.8)' }}>{stats.pct}%</strong> vs {myPct}% (vos)</span>
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={(e) => { e.stopPropagation(); onCompare(friend.id); }}
-                          style={{
-                            alignSelf: 'flex-start', padding: '4px 0', border: 'none', background: 'none',
-                            fontSize: '11px', fontWeight: 600, color: '#60A5FA', cursor: 'pointer',
-                            fontFamily: "'Syne', sans-serif",
-                          }}
-                        >
-                          Ver comparación completa →
-                        </button>
-                      </>
-                    )}
                   </div>
                 );
               })}

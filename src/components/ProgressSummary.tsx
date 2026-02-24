@@ -4,7 +4,7 @@ import { usePlanStore } from '../store/usePlanStore';
 import { curriculum } from '../data/curriculum';
 
 export const ProgressSummary: React.FC = () => {
-  const { subjectStates, resetAll } = useStudyStore();
+  const { subjectStates } = useStudyStore();
   const { activePlanSubjects } = usePlanStore();
   const base = activePlanSubjects.length > 0 ? activePlanSubjects : curriculum;
 
@@ -94,33 +94,6 @@ export const ProgressSummary: React.FC = () => {
         total={engineeringStats.total}
         color="rgba(168, 85, 247, 0.7)"
       />
-      <button
-        onClick={resetAll}
-        style={{
-          fontSize: '9px',
-          fontWeight: 500,
-          color: 'rgba(255,255,255,0.25)',
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.06)',
-          borderRadius: '5px',
-          padding: '5px 10px',
-          cursor: 'pointer',
-          letterSpacing: '0.03em',
-          textTransform: 'uppercase',
-          transition: 'all 0.2s ease',
-          whiteSpace: 'nowrap',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = 'rgba(255,255,255,0.5)';
-          e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = 'rgba(255,255,255,0.25)';
-          e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-        }}
-      >
-        Reiniciar
-      </button>
     </div>
   );
 };

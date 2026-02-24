@@ -76,9 +76,9 @@ interface Props {
 }
 
 export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode = false }) => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { friendStates, friendGrades, friendProfile, friendPlan, friendPlanSubjects, loadFriendStates, clearFriendView } = useFriendsStore();
-  const { subjectStates } = useStudyStore();
+  const { subjectStates, getAverages } = useStudyStore();
   const { copyPlan, setActivePlan, loadUserPlans } = usePlanStore();
   const [copying, setCopying] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -269,11 +269,25 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
     );
   }
 
-  // ─── Vista comparación: dos gráficos (uno por lado) con nombres arriba
+  // ─── Vista comparación
+  const myColor = profile?.profile_color || '#3b82f6';
+  const myName = profile?.display_name || 'Yo';
+  const fColor = friendProfile.profile_color;
+  const fName = friendProfile.display_name;
+
   const myApproved = baseSubjects.filter(s => subjectStates[s.id] === 'approved').length;
   const myFinals = baseSubjects.filter(s => subjectStates[s.id] === 'final').length;
   const myPending = baseSubjects.length - myApproved - myFinals;
   const myPct = baseSubjects.length > 0 ? Math.round((myApproved / baseSubjects.length) * 100) : 0;
+  const friendPending = friendTotal - friendApproved - friendFinals;
+
+  const myAverages = getAverages(baseSubjects.map(s => s.id));
+
+  const analystSubjects = baseSubjects.filter(s => s.isAnalyst);
+  const myAnalystApproved = analystSubjects.filter(s => subjectStates[s.id] === 'approved').length;
+  const friendAnalystApproved = analystSubjects.filter(s => friendStates[s.id] === 'approved').length;
+  const myEngApproved = myApproved;
+  const friendEngApproved = friendApproved;
 
   const mySegments = [
     { value: myApproved, color: '#4ADE80' },
@@ -283,13 +297,50 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
   const friendSegments = [
     { value: friendApproved, color: '#4ADE80' },
     { value: friendFinals, color: '#FB923C' },
-    { value: friendTotal - friendApproved - friendFinals, color: 'rgba(255,255,255,0.2)' },
+    { value: friendPending, color: 'rgba(255,255,255,0.2)' },
   ];
+
+  // Comparison bar component (no names, just colored dots)
+  const CompareBar = ({ label, myVal, friendVal, myNum, friendNum, total }: {
+    label: string; myVal: string; friendVal: string; myNum: number; friendNum: number; total: number;
+  }) => {
+    const myPctBar = total > 0 ? (myNum / total) * 100 : 0;
+    const friendPctBar = total > 0 ? (friendNum / total) * 100 : 0;
+    return (
+      <div style={{
+        background: 'rgba(255,255,255,0.02)',
+        border: '1px solid rgba(255,255,255,0.04)',
+        borderRadius: '10px',
+        padding: '14px 16px',
+        display: 'flex', flexDirection: 'column', gap: '8px',
+      }}>
+        <div style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.45)' }}>
+          {label}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: myColor, flexShrink: 0 }} />
+          <span style={{ fontSize: '13px', fontWeight: 700, color: myColor, minWidth: '36px' }}>{myVal}</span>
+          <div style={{ flex: 1, height: '8px', borderRadius: '4px', background: 'rgba(255,255,255,0.04)', overflow: 'hidden' }}>
+            <motion.div initial={{ width: 0 }} animate={{ width: `${myPctBar}%` }} transition={{ duration: 0.6, ease: 'easeOut' }}
+              style={{ height: '100%', borderRadius: '4px', background: `linear-gradient(90deg, ${myColor}, ${myColor}b0)` }} />
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: fColor, flexShrink: 0 }} />
+          <span style={{ fontSize: '13px', fontWeight: 700, color: fColor, minWidth: '36px' }}>{friendVal}</span>
+          <div style={{ flex: 1, height: '8px', borderRadius: '4px', background: 'rgba(255,255,255,0.04)', overflow: 'hidden' }}>
+            <motion.div initial={{ width: 0 }} animate={{ width: `${friendPctBar}%` }} transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+              style={{ height: '100%', borderRadius: '4px', background: `linear-gradient(90deg, ${fColor}, ${fColor}b0)` }} />
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div style={{ flex: 1, overflow: 'auto', padding: '16px', fontFamily: "'Syne', sans-serif" }}>
-      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <button onClick={onBack} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             width: 36, height: 36, borderRadius: '10px',
@@ -303,79 +354,78 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
           </h2>
         </div>
 
-        <div className="grid-compare" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', alignItems: 'start' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+        {/* Legend with names + colors */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', fontSize: '11px' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: myColor }}>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', background: myColor }} /> {myName}
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: fColor }}>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', background: fColor }} /> {fName}
+          </span>
+        </div>
+
+        {/* Donuts + quick stats */}
+        <div className="grid-compare" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', alignItems: 'stretch' }}>
+          {/* MY CARD */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
             style={{
-              background: 'rgba(255,255,255,0.02)',
-              border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: '14px',
-              padding: '24px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '16px',
+              background: 'rgba(255,255,255,0.02)', border: `1px solid ${myColor}30`,
+              borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
             }}
           >
-            <div style={{ fontSize: '14px', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>
-              {user ? 'Vos' : 'Yo'}
-            </div>
-            <MiniDonut
-              segments={mySegments}
-              centerValue={`${myPct}%`}
-              centerLabel="completado"
-            />
-            <div style={{ display: 'flex', gap: '12px', fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ADE80' }} /> Aprob. ({myApproved})
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#FB923C' }} /> Final ({myFinals})
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} /> Pend. ({myPending})
-              </span>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: myColor }}>{myName}</div>
+            <MiniDonut segments={mySegments} size={130} centerValue={`${myPct}%`} centerLabel="completado" />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px', width: '100%' }}>
+              {[
+                { v: myApproved, c: '#4ADE80', l: 'Aprob.' },
+                { v: myFinals, c: '#FB923C', l: 'Final' },
+                { v: myPending, c: 'rgba(255,255,255,0.35)', l: 'Pend.' },
+              ].map(s => (
+                <div key={s.l} style={{ textAlign: 'center', padding: '6px 4px', borderRadius: '6px', background: 'rgba(255,255,255,0.02)' }}>
+                  <div style={{ fontSize: '16px', fontWeight: 700, color: s.c }}>{s.v}</div>
+                  <div style={{ fontSize: '8px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>{s.l}</div>
+                </div>
+              ))}
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
+          {/* FRIEND CARD */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 }}
             style={{
-              background: 'rgba(255,255,255,0.02)',
-              border: `1px solid ${friendProfile.profile_color}30`,
-              borderRadius: '14px',
-              padding: '24px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '16px',
+              background: 'rgba(255,255,255,0.02)', border: `1px solid ${fColor}30`,
+              borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
             }}
           >
-            <div style={{ fontSize: '14px', fontWeight: 700, color: friendProfile.profile_color }}>
-              {friendProfile.display_name}
-            </div>
-            <MiniDonut
-              segments={friendSegments}
-              centerValue={`${friendPct}%`}
-              centerLabel="completado"
-            />
-            <div style={{ display: 'flex', gap: '12px', fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ADE80' }} /> Aprob. ({friendApproved})
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#FB923C' }} /> Final ({friendFinals})
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} /> Pend. ({friendTotal - friendApproved - friendFinals})
-              </span>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: fColor }}>{fName}</div>
+            <MiniDonut segments={friendSegments} size={130} centerValue={`${friendPct}%`} centerLabel="completado" />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px', width: '100%' }}>
+              {[
+                { v: friendApproved, c: '#4ADE80', l: 'Aprob.' },
+                { v: friendFinals, c: '#FB923C', l: 'Final' },
+                { v: friendPending, c: 'rgba(255,255,255,0.35)', l: 'Pend.' },
+              ].map(s => (
+                <div key={s.l} style={{ textAlign: 'center', padding: '6px 4px', borderRadius: '6px', background: 'rgba(255,255,255,0.02)' }}>
+                  <div style={{ fontSize: '16px', fontWeight: 700, color: s.c }}>{s.v}</div>
+                  <div style={{ fontSize: '8px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>{s.l}</div>
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>
+
+        {/* Comparison bars */}
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.2 }}>
+          <div className="grid-charts" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <CompareBar label="Materias aprobadas" myVal={`${myApproved}`} friendVal={`${friendApproved}`}
+              myNum={myApproved} friendNum={friendApproved} total={baseSubjects.length} />
+            <CompareBar label="Promedio general" myVal={myAverages.average != null ? myAverages.average.toFixed(2) : '–'} friendVal={friendAverage != null ? friendAverage.toFixed(2) : '–'}
+              myNum={myAverages.average ?? 0} friendNum={friendAverage ?? 0} total={10} />
+            <CompareBar label="Analista en Sistemas" myVal={`${myAnalystApproved}/${analystSubjects.length}`} friendVal={`${friendAnalystApproved}/${analystSubjects.length}`}
+              myNum={myAnalystApproved} friendNum={friendAnalystApproved} total={analystSubjects.length} />
+            <CompareBar label="Ingeniería en Sistemas" myVal={`${myEngApproved}/${baseSubjects.length}`} friendVal={`${friendEngApproved}/${baseSubjects.length}`}
+              myNum={myEngApproved} friendNum={friendEngApproved} total={baseSubjects.length} />
+          </div>
+        </motion.div>
       </div>
     </div>
   );

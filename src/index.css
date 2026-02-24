@@ -134,4 +134,16 @@
   .app-main {
     padding-bottom: 64px !important;
   }
+
+  /* Zoom controls above bottom tab bar */
+  .zoom-controls {
+    bottom: 76px !important;
+    right: 12px !important;
+  }
+
+  /* Semester labels smaller on mobile */
+  .semester-label {
+    width: 60px !important;
+    font-size: 8px !important;
+  }
 }

@@ -262,53 +262,6 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
             </div>
           </div>
 
-          {/* Progreso por área */}
-          {(() => {
-            const byCategory: Record<string, { total: number; done: number }> = {};
-            filtered.forEach(s => {
-              const cat = s.category || 'General';
-              if (!byCategory[cat]) byCategory[cat] = { total: 0, done: 0 };
-              byCategory[cat].total++;
-              if (subjectStates[s.id] === 'approved') byCategory[cat].done++;
-            });
-            const categories = Object.entries(byCategory).sort(([, a], [, b]) => b.done / b.total - a.done / a.total);
-            if (categories.length === 0) return null;
-            return (
-              <div style={{
-                background: 'var(--bg-surface)',
-                border: '1px solid var(--bg-border)',
-                borderRadius: '10px',
-                padding: '14px 16px',
-                marginBottom: '16px',
-              }}>
-                <div style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                  Progreso por área
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {categories.map(([cat, { total, done }]) => {
-                    const catPct = total > 0 ? Math.round((done / total) * 100) : 0;
-                    return (
-                      <div key={cat} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>{cat}</span>
-                          <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{done}/{total}</span>
-                        </div>
-                        <div style={{ height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${catPct}%` }}
-                            transition={{ duration: 0.5, ease: 'easeOut' }}
-                            style={{ height: '100%', borderRadius: '2px', background: currentColor }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })()}
-
           {/* Últimas aprobadas (3) */}
           {(() => {
             const approvedList = filtered

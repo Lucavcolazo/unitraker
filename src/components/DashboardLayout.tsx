@@ -294,8 +294,8 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
             color: section === 'settings' ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.35)',
           }}
         >
-          <Settings size={14} />
-          <span>Config</span>
+          <User size={14} />
+          <span>Perfil</span>
         </button>
       </nav>
 

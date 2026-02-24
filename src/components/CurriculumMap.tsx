@@ -61,9 +61,9 @@ const SubjectCard: React.FC<{
         cursor: isLocked ? 'not-allowed' : 'pointer',
         borderRadius: '8px',
         padding: '8px 10px',
-        minWidth: '130px',
+        minWidth: '110px',
         maxWidth: '160px',
-        flex: '1 1 130px',
+        flex: '1 1 110px',
         minHeight: '50px',
         display: 'flex',
         flexDirection: 'column',
@@ -178,14 +178,14 @@ const SemesterRow: React.FC<{
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      gap: '20px',
-      padding: '20px 0',
+      gap: '12px',
+      padding: '12px 0',
     }}>
       {/* Subject cards */}
       <div style={{
         flex: 1,
         display: 'flex',
-        gap: '16px',
+        gap: '10px',
         flexWrap: 'wrap',
       }}>
         {subjects.map((sub) => {
@@ -215,11 +215,11 @@ const SemesterRow: React.FC<{
       </div>
 
       {/* Right label */}
-      <div style={{
-        width: '100px',
+      <div className="semester-label" style={{
+        width: '80px',
         flexShrink: 0,
         textAlign: 'right',
-        fontSize: '11px',
+        fontSize: '10px',
         fontWeight: 700,
         color: 'rgba(255,255,255,0.6)',
         letterSpacing: '0.04em',
@@ -483,7 +483,7 @@ export const CurriculumMap: React.FC = () => {
       </div>
 
       {/* Zoom Controls */}
-      <div style={{
+      <div className="zoom-controls" style={{
         position: 'fixed',
         bottom: '20px',
         right: '20px',
