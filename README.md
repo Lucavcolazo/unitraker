@@ -10,4 +10,4 @@ Acá podés marcar qué materias ya aprobaste, cuáles tenés en final y cuáles
 
 ---
 
-**Para desarrolladores:** clonar el repo, copiar `.env.example` a `.env` y configurar `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`. Los scripts SQL están en la carpeta `supabase/` (ver orden en `supabase/README.md`).
+**Para desarrolladores:** clonar el repo, copiar `.env.example` a `.env` y configurar `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`. Los scripts SQL están en la carpeta `supabase/` (ver orden en `supabase/README.md`). En Vercel, `vercel.json` hace que todas las rutas de la app sirvan el SPA (evita 404 al recargar en `/app/map`); los usuarios no logueados que entren a `/app/*` son redirigidos a la bienvenida `/` desde el cliente.

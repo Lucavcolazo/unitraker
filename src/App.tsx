@@ -10,6 +10,7 @@ import { FriendsPage } from './components/FriendsPage';
 import { FriendProfile } from './components/FriendProfile';
 import { ProfileSettings } from './components/ProfileSettings';
 import { ProximamenteView } from './components/ProximamenteView';
+import { AuthGuard } from './components/AuthGuard';
 import { useStudyStore } from './store/useStudyStore';
 import { usePlanStore } from './store/usePlanStore';
 
@@ -202,12 +203,14 @@ function App() {
     <AuthProvider>
       <AuthLoader />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<WelcomeRoute />} />
-          <Route path="/login" element={<LoginRoute />} />
-          <Route path="/app/*" element={<AppRoute />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <AuthGuard>
+          <Routes>
+            <Route path="/" element={<WelcomeRoute />} />
+            <Route path="/login" element={<LoginRoute />} />
+            <Route path="/app/*" element={<AppRoute />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AuthGuard>
       </BrowserRouter>
     </AuthProvider>
   );
