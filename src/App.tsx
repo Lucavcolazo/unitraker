@@ -141,17 +141,17 @@ function AppRoute() {
     return <ProximamenteView onBack={() => navigate('/app/settings')} />;
   }
 
-  // /app/amigo/:friendId → perfil de amigo
-  const friendMatch = path.match(/^\/app\/amigo\/([^/]+)$/);
-  if (friendMatch) {
-    const friendId = friendMatch[1];
+  // /app/friends/:friendId → perfil o comparación con amigo (dentro de Amigos, sin barra mapa)
+  const friendsFriendMatch = path.match(/^\/app\/friends\/([^/]+)$/);
+  if (friendsFriendMatch) {
+    const friendId = friendsFriendMatch[1];
     const compare = new URLSearchParams(location.search).get('compare') === '1';
     return (
-      <DashboardLayout section="map" onSectionChange={() => {}}>
+      <DashboardLayout section="friends" onSectionChange={(s) => { if (s !== 'friends') navigate(`/app/${s}`); }}>
         <FriendProfile
           friendId={friendId}
           compareMode={compare}
-          onBack={() => navigate(-1)}
+          onBack={() => navigate('/app/friends')}
         />
       </DashboardLayout>
     );
@@ -177,8 +177,8 @@ function AppContentWithSection() {
       case 'stats': return <StatsPage />;
       case 'friends': return (
         <FriendsPage
-          onViewFriend={(id) => navigate(`/app/amigo/${id}`)}
-          onCompare={(id) => navigate(`/app/amigo/${id}?compare=1`)}
+          onViewFriend={(id) => navigate(`/app/friends/${id}`)}
+          onCompare={(id) => navigate(`/app/friends/${id}?compare=1`)}
         />
       );
       case 'settings': return (

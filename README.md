@@ -11,3 +11,5 @@ Acá podés marcar qué materias ya aprobaste, cuáles tenés en final y cuáles
 ---
 
 **Para desarrolladores:** clonar el repo, copiar `.env.example` a `.env` y configurar `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`. Los scripts SQL están en la carpeta `supabase/` (ver orden en `supabase/README.md`). En Vercel, `vercel.json` hace que todas las rutas de la app sirvan el SPA (evita 404 al recargar en `/app/map`); los usuarios no logueados que entren a `/app/*` son redirigidos a la bienvenida `/` desde el cliente.
+
+**Login con GitHub (producción):** para que el redirect después de OAuth no vaya a localhost, en Vercel definí la variable de entorno `VITE_APP_URL` con la URL pública de la app (ej. `https://unitraker.vercel.app`). En Supabase Dashboard > **Authentication** > **URL Configuration** poné esa URL en **Site URL** y agregá en **Redirect URLs** por lo menos `https://tu-dominio.vercel.app/app` (y opcionalmente `https://tu-dominio.vercel.app/**`).

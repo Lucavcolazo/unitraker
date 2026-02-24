@@ -28,11 +28,15 @@ export const LoginPage: React.FC<Props> = ({ onBack }) => {
 
   const passwordValid = meetsPasswordRequirements(password);
   const passwordTouched = password.length > 0;
-  const passwordBorderColor = !passwordTouched
-    ? 'rgba(255,255,255,0.08)'
-    : passwordValid
-      ? 'rgba(74, 222, 128, 0.5)'
-      : 'rgba(239, 68, 68, 0.5)';
+  // En login no mostramos validación visual de contraseña (sin rojo); solo en registro.
+  const passwordBorderColor =
+    mode === 'login'
+      ? 'rgba(255,255,255,0.08)'
+      : !passwordTouched
+        ? 'rgba(255,255,255,0.08)'
+        : passwordValid
+          ? 'rgba(74, 222, 128, 0.5)'
+          : 'rgba(239, 68, 68, 0.5)';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

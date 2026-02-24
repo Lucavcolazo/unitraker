@@ -56,7 +56,7 @@ interface Props {
 export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) => {
   const navigate = useNavigate();
   const { profile, user, signOut, refreshProfile } = useAuth();
-  const { subjectStates } = useStudyStore();
+  const { subjectStates, getAverages } = useStudyStore();
   const { activePlanSubjects, plans, activePlanId, setActivePlan, deletePlan } = usePlanStore();
   const { friends } = useFriendsStore();
   const base = activePlanSubjects.length > 0 ? activePlanSubjects : curriculum;
@@ -79,6 +79,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
   const filtered = degreeTrack === 'analista'
     ? base.filter(s => s.isAnalyst)
     : base;
+  const profileAverages = getAverages(filtered.map(s => s.id));
   const approved = filtered.filter(s => subjectStates[s.id] === 'approved').length;
   const finals = filtered.filter(s => subjectStates[s.id] === 'final').length;
   const total = filtered.length;
@@ -218,6 +219,26 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
               </motion.div>
             ))}
           </div>
+
+          {/* Promedios (si tiene notas cargadas) */}
+          {profileAverages.materiasConNota > 0 && (
+            <div style={{
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--bg-border)',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              marginBottom: '16px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '12px',
+            }}>
+              <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>Promedio general</div>
+              <div style={{ fontSize: '18px', fontWeight: 700, color: '#4ADE80' }}>
+                {profileAverages.average?.toFixed(2) ?? '–'}
+              </div>
+            </div>
+          )}
 
           {/* Progress bar */}
           <div style={{

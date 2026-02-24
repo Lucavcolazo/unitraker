@@ -98,9 +98,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signInWithGitHub = async () => {
+    // En producción usar VITE_APP_URL para que el redirect no termine en localhost.
+    // En Supabase Dashboard > Authentication > URL Configuration hay que tener esta URL en "Redirect URLs".
+    const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
+    const redirectTo = `${baseUrl.replace(/\/$/, '')}/app`;
     await supabase.auth.signInWithOAuth({
       provider: 'github',
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo },
     });
   };
 

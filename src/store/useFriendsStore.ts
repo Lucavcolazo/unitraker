@@ -37,6 +37,8 @@ interface FriendsState {
     loading: boolean;
     searching: boolean;
     friendStates: Record<string, SubjectStatus>;
+    /** Notas del amigo (grade_direct por materia) para calcular promedio */
+    friendGrades: Record<string, number>;
     friendProfile: FriendProfile | null;
     friendPlan: FriendPlanInfo | null;
     friendPlanSubjects: Subject[];
@@ -56,6 +58,15 @@ interface FriendsState {
     clearFriendView: () => void;
 }
 
+function parseGradeFinals(val: unknown): number[] {
+    if (Array.isArray(val)) return val.map(Number).filter((n) => !Number.isNaN(n));
+    if (typeof val === 'string') {
+        const parsed = val.replace(/[{}]/g, '').split(',').map((s) => Number(s.trim())).filter((n) => !Number.isNaN(n));
+        return parsed;
+    }
+    return [];
+}
+
 export const useFriendsStore = create<FriendsState>((set, get) => ({
     friends: [],
     pendingRequests: [],
@@ -63,6 +74,7 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
     loading: false,
     searching: false,
     friendStates: {},
+    friendGrades: {},
     friendProfile: null,
     friendPlan: null,
     friendPlanSubjects: [],
@@ -244,16 +256,21 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
             .eq('id', friendId)
             .single();
 
-        // Load subject states
+        // Load subject states and grades (para promedio del amigo)
         const { data: states } = await supabase
             .from('subject_states')
-            .select('subject_id, status')
+            .select('subject_id, status, grade_direct, grade_finals')
             .eq('user_id', friendId);
 
         const stateMap: Record<string, SubjectStatus> = {};
+        const gradesMap: Record<string, number> = {};
         if (states) {
-            states.forEach(row => {
+            states.forEach((row: { subject_id: string; status: string; grade_direct?: number | null; grade_finals?: number[] | string | null }) => {
                 stateMap[row.subject_id] = row.status as SubjectStatus;
+                const direct = row.grade_direct != null ? Number(row.grade_direct) : null;
+                const finals = parseGradeFinals(row.grade_finals);
+                const efectiva = direct ?? (finals.length > 0 ? finals[finals.length - 1] : null);
+                if (efectiva != null) gradesMap[row.subject_id] = efectiva;
             });
         }
 
@@ -294,6 +311,7 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
 
         set({
             friendStates: stateMap,
+            friendGrades: gradesMap,
             friendProfile: profile as FriendProfile | null,
             friendPlan,
             friendPlanSubjects,
@@ -301,5 +319,5 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
     },
 
     clearSearch: () => set({ searchResults: [] }),
-    clearFriendView: () => set({ friendStates: {}, friendProfile: null, friendPlan: null, friendPlanSubjects: [] }),
+    clearFriendView: () => set({ friendStates: {}, friendGrades: {}, friendProfile: null, friendPlan: null, friendPlanSubjects: [] }),
 }));

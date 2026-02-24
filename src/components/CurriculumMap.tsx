@@ -188,8 +188,12 @@ const SemesterRow: React.FC<{
         flexWrap: 'wrap',
       }}>
         {subjects.map((sub) => {
+          // Desbloqueada si todas las correlativas están aprobadas o en final (no pendientes).
           const isLocked = sub.correlatives.length > 0 &&
-            !sub.correlatives.every((corrId) => subjectStates[corrId] === 'approved');
+            !sub.correlatives.every((corrId) => {
+              const st = subjectStates[corrId] || 'pending';
+              return st === 'approved' || st === 'final';
+            });
 
           return (
             <SubjectCard

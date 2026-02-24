@@ -13,7 +13,9 @@ import {
   Target,
   ChevronDown,
   ChevronUp,
+  PlusCircle,
 } from 'lucide-react';
+import { LoadGradesModal } from './LoadGradesModal';
 
 const STATUS_CONFIG: Record<SubjectStatus, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
   approved: { label: 'Aprobadas', color: '#4ADE80', bg: 'rgba(74, 222, 128, 0.05)', border: 'rgba(74, 222, 128, 0.35)', icon: <CheckCircle2 size={14} /> },
@@ -275,9 +277,10 @@ const SubjectList: React.FC<{
 };
 
 export const StatsPage: React.FC = () => {
-  const { subjectStates } = useStudyStore();
+  const { subjectStates, subjectGrades, getAverages } = useStudyStore();
   const { profile } = useAuth();
   const { activePlanSubjects } = usePlanStore();
+  const [gradesModalOpen, setGradesModalOpen] = useState(false);
 
   const baseCurriculum = activePlanSubjects.length > 0 ? activePlanSubjects : curriculum;
 
@@ -335,6 +338,11 @@ export const StatsPage: React.FC = () => {
     };
   }, [subjectStates, filteredCurriculum]);
 
+  const averages = useMemo(
+    () => getAverages(filteredCurriculum.map(s => s.id)),
+    [getAverages, filteredCurriculum, subjectGrades]
+  );
+
   const donutSegments = [
     { value: stats.byStatus.approved.length, color: '#4ADE80', label: 'Aprobadas' },
     { value: stats.byStatus.final.length, color: '#FB923C', label: 'Final pend.' },
@@ -355,7 +363,7 @@ export const StatsPage: React.FC = () => {
         flexDirection: 'column',
         gap: '20px',
       }}>
-        {/* Top Stats Cards */}
+        {/* Top: 4 módulos — Aprobadas, Final pend., Pendientes, Promedio (derecha) */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
           {([
             { status: 'approved' as SubjectStatus, delay: 0 },
@@ -395,7 +403,57 @@ export const StatsPage: React.FC = () => {
               </motion.div>
             );
           })}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            style={{
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid rgba(74,222,128,0.2)',
+              borderRadius: '10px',
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+            }}
+          >
+            <div style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>
+              Promedio
+            </div>
+            <div style={{ fontSize: '34px', fontWeight: 800, color: '#4ADE80', lineHeight: 1.1 }}>
+              {averages.materiasConNota > 0 ? (averages.average?.toFixed(2) ?? '–') : '–'}
+            </div>
+            <button
+              type="button"
+              onClick={() => setGradesModalOpen(true)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '4px',
+                padding: '6px 10px',
+                borderRadius: '6px',
+                border: '1px solid rgba(74,222,128,0.3)',
+                background: 'rgba(74,222,128,0.1)',
+                color: '#4ADE80',
+                fontSize: '10px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                fontFamily: "'Geist', sans-serif",
+                alignSelf: 'flex-start',
+              }}
+            >
+              <PlusCircle size={12} />
+              Agregar notas
+            </button>
+          </motion.div>
         </div>
+
+        <LoadGradesModal
+          open={gradesModalOpen}
+          onClose={() => setGradesModalOpen(false)}
+          subjects={baseCurriculum.filter((s) => subjectStates[s.id] === 'approved')}
+        />
 
         {/* Charts Row */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>

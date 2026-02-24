@@ -165,14 +165,11 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
           )}
         </div>
 
-        {/* Center: Section Tabs */}
+        {/* Center: Section Tabs — solo texto e iconos; seleccionado en blanco */}
         <div style={{
           display: 'flex',
-          gap: '2px',
-          background: 'rgba(255,255,255,0.03)',
-          borderRadius: '8px',
-          padding: '3px',
-          border: '1px solid rgba(255,255,255,0.04)',
+          alignItems: 'center',
+          gap: '20px',
         }}>
           {tabs.map(tab => (
             <button
@@ -181,18 +178,16 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '5px',
-                padding: '5px 14px',
-                borderRadius: '6px',
+                gap: '6px',
+                padding: '4px 0',
                 border: 'none',
+                background: 'transparent',
                 cursor: 'pointer',
-                fontSize: '11px',
-                fontWeight: 600,
+                fontSize: '12px',
+                fontWeight: 500,
                 fontFamily: "'Geist', sans-serif",
-                letterSpacing: '0.01em',
-                transition: 'all 0.2s ease',
-                background: section === tab.id ? 'rgba(255,255,255,0.08)' : 'transparent',
-                color: section === tab.id ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)',
+                color: section === tab.id ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.4)',
+                transition: 'color 0.2s ease',
                 position: 'relative',
               }}
             >
@@ -200,8 +195,9 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
               {tab.label}
               {tab.badge !== undefined && tab.badge > 0 && (
                 <span style={{
-                  position: 'absolute', top: -2, right: -2,
-                  width: 14, height: 14, borderRadius: '50%',
+                  position: 'absolute', top: -4, right: -10,
+                  minWidth: 14, height: 14, borderRadius: '7px',
+                  padding: '0 4px',
                   background: 'rgba(239,68,68,0.9)',
                   color: 'white',
                   fontSize: '8px', fontWeight: 700,
