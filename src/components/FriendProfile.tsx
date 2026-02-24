@@ -3,7 +3,7 @@ import { useFriendsStore } from '../store/useFriendsStore';
 import { useStudyStore } from '../store/useStudyStore';
 import { usePlanStore } from '../store/usePlanStore';
 import { useAuth } from '../contexts/AuthContext';
-import { curriculum, type Subject, type SubjectStatus } from '../data/curriculum';
+import { curriculum, type Subject } from '../data/curriculum';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle2, FileText, BookOpen, Copy, GraduationCap, BarChart3 } from 'lucide-react';
 import {
@@ -20,11 +20,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   GraduationCap: <GraduationCap size={20} />,
 };
 
-const statusColor: Record<SubjectStatus, string> = {
-  approved: '#4ADE80',
-  final: '#FB923C',
-  pending: 'rgba(255,255,255,0.35)',
-};
+
 
 /** Donut mínimo para comparación */
 const MiniDonut: React.FC<{
@@ -213,7 +209,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
               {[
                 { label: 'Total', value: friendTotal, color: 'rgba(255,255,255,0.5)', icon: <GraduationCap size={14} /> },
                 { label: 'Aprobadas', value: friendApproved, color: '#4ADE80', icon: <CheckCircle2 size={14} /> },
-                { label: 'Final pend.', value: friendFinals, color: '#FB923C', icon: <FileText size={14} /> },
+                { label: friendFinals === 1 ? 'Final pend.' : 'Finales pend.', value: friendFinals, color: '#FB923C', icon: <FileText size={14} /> },
                 { label: 'Pendientes', value: friendTotal - friendApproved - friendFinals, color: 'rgba(255,255,255,0.35)', icon: <BookOpen size={14} /> },
               ].map(s => (
                 <div
