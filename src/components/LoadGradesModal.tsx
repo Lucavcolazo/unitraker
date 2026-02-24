@@ -69,7 +69,7 @@ export const LoadGradesModal: React.FC<LoadGradesModalProps> = ({ open, onClose,
           justifyContent: 'center',
           padding: 16,
           background: 'rgba(0,0,0,0.6)',
-          fontFamily: "'Geist', sans-serif",
+          fontFamily: "'Syne', sans-serif",
         }}
         onClick={onClose}
       >
@@ -139,7 +139,7 @@ export const LoadGradesModal: React.FC<LoadGradesModalProps> = ({ open, onClose,
                     fontSize: '13px',
                     fontWeight: 600,
                     cursor: 'pointer',
-                    fontFamily: "'Geist', sans-serif",
+                    fontFamily: "'Syne', sans-serif",
                   }}
                 >
                   Cerrar
@@ -170,7 +170,7 @@ export const LoadGradesModal: React.FC<LoadGradesModalProps> = ({ open, onClose,
                       background: 'rgba(255,255,255,0.04)',
                       color: 'rgba(255,255,255,0.9)',
                       fontSize: '14px',
-                      fontFamily: "'Geist', sans-serif",
+                      fontFamily: "'Syne', sans-serif",
                     }}
                   >
                     {subjects.map(s => (
@@ -209,7 +209,7 @@ export const LoadGradesModal: React.FC<LoadGradesModalProps> = ({ open, onClose,
                       background: 'rgba(255,255,255,0.04)',
                       color: 'rgba(255,255,255,0.9)',
                       fontSize: '14px',
-                      fontFamily: "'Geist', sans-serif",
+                      fontFamily: "'Syne', sans-serif",
                     }}
                   />
                   <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', marginTop: '6px' }}>
@@ -243,7 +243,7 @@ export const LoadGradesModal: React.FC<LoadGradesModalProps> = ({ open, onClose,
                       fontSize: '13px',
                       fontWeight: 600,
                       cursor: 'pointer',
-                      fontFamily: "'Geist', sans-serif",
+                      fontFamily: "'Syne', sans-serif",
                     }}
                   >
                     Cerrar
@@ -262,7 +262,7 @@ export const LoadGradesModal: React.FC<LoadGradesModalProps> = ({ open, onClose,
                       fontSize: '13px',
                       fontWeight: 600,
                       cursor: canSave && !saving ? 'pointer' : 'not-allowed',
-                      fontFamily: "'Geist', sans-serif",
+                      fontFamily: "'Syne', sans-serif",
                     }}
                   >
                     {saving ? 'Guardando…' : 'Guardar nota'}

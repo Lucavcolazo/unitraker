@@ -95,7 +95,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
       flex: 1,
       overflow: 'auto',
       padding: '24px',
-      fontFamily: "'Geist', sans-serif",
+      fontFamily: "'Syne', sans-serif",
     }}>
       <div style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* Search */}
@@ -122,7 +122,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
               style={{
                 flex: 1, padding: '9px 12px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)',
-                color: 'rgba(255,255,255,0.85)', fontSize: '12px', fontFamily: "'Geist', sans-serif",
+                color: 'rgba(255,255,255,0.85)', fontSize: '12px', fontFamily: "'Syne', sans-serif",
                 outline: 'none',
               }}
             />
@@ -132,7 +132,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
               style={{
                 padding: '9px 16px', borderRadius: '8px', border: 'none',
                 background: 'rgba(59,130,246,0.15)', color: 'rgba(59,130,246,0.8)',
-                fontSize: '12px', fontWeight: 600, fontFamily: "'Geist', sans-serif",
+                fontSize: '12px', fontWeight: 600, fontFamily: "'Syne', sans-serif",
                 cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '5px',
               }}
@@ -196,7 +196,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
                         padding: '5px 10px', borderRadius: '6px', border: 'none',
                         background: 'rgba(59,130,246,0.12)', color: 'rgba(59,130,246,0.8)',
                         fontSize: '10px', fontWeight: 600, cursor: 'pointer',
-                        fontFamily: "'Geist', sans-serif",
+                        fontFamily: "'Syne', sans-serif",
                       }}
                     >
                       <UserPlus size={11} /> Agregar
@@ -322,7 +322,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
                 style={{
                   marginTop: '4px', padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--bg-border)',
                   background: 'var(--bg-elevated)', color: 'rgba(255,255,255,0.7)', fontSize: '12px', fontWeight: 600,
-                  cursor: 'pointer', fontFamily: "'Geist', sans-serif",
+                  cursor: 'pointer', fontFamily: "'Syne', sans-serif",
                 }}
               >
                 Buscar compañeros
@@ -377,7 +377,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
                             padding: '5px 8px', borderRadius: '6px', border: 'none',
                             background: 'rgba(168,85,247,0.1)', color: 'rgba(168,85,247,0.7)',
                             fontSize: '9px', fontWeight: 600, cursor: 'pointer',
-                            fontFamily: "'Geist', sans-serif",
+                            fontFamily: "'Syne', sans-serif",
                           }}
                         >
                           <ArrowLeftRight size={10} /> Comparar
@@ -419,7 +419,7 @@ export const FriendsPage: React.FC<Props> = ({ onViewFriend, onCompare }) => {
                           style={{
                             alignSelf: 'flex-start', padding: '4px 0', border: 'none', background: 'none',
                             fontSize: '11px', fontWeight: 600, color: '#60A5FA', cursor: 'pointer',
-                            fontFamily: "'Geist', sans-serif",
+                            fontFamily: "'Syne', sans-serif",
                           }}
                         >
                           Ver comparación completa →

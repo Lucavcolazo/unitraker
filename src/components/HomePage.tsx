@@ -3,6 +3,7 @@ import { useStudyStore } from '../store/useStudyStore';
 import { useAuth } from '../contexts/AuthContext';
 import { usePlanStore } from '../store/usePlanStore';
 import { curriculum } from '../data/curriculum';
+import { Map, BarChart3, Users, ArrowRight } from 'lucide-react';
 import type { Section } from '../App';
 
 interface Props {
@@ -103,7 +104,6 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     [getAverages, filteredCurriculum, subjectGrades]
   );
 
-  const overallPercent = stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0;
   const analystPercent = stats.analystAll.length > 0 ? Math.round((stats.analystApproved.length / stats.analystAll.length) * 100) : 0;
   const engPercent = stats.engAll.length > 0 ? Math.round((stats.engApproved.length / stats.engAll.length) * 100) : 0;
 
@@ -157,8 +157,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               backgroundClip: 'text',
             }}>
               {displayName}
-            </span>{' '}
-            👋
+            </span>
           </h1>
           <div style={{
             fontSize: 15,
@@ -166,7 +165,6 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             fontFamily: fontMono,
             fontWeight: 400,
           }}>
-            Tu progreso académico, en un solo lugar.
           </div>
         </div>
 
@@ -229,21 +227,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: -1, lineHeight: 1, color: V.text }}>
               {averages.materiasConNota > 0 ? <AnimatedNumber value={averages.average ?? 0} decimals={2} delay={400} /> : '–'}
             </div>
-            <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 5 }}>
-              <div style={{ height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 99, overflow: 'hidden' }}>
-                <div style={{
-                  height: '100%',
-                  borderRadius: 99,
-                  width: `${overallPercent}%`,
-                  background: 'linear-gradient(90deg, #22c55e, #86efac)',
-                  transition: 'width 1s ease',
-                }} />
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, fontFamily: fontMono, color: V.muted }}>
-                <span>0%</span>
-                <span>{overallPercent}% completado</span>
-                <span>100%</span>
-              </div>
+            <div style={{ fontSize: 11, color: V.muted, fontFamily: fontMono }}>
+              {averages.materiasConNota > 0 ? `${averages.materiasConNota} con nota` : 'sin notas aún'}
             </div>
           </div>
         </div>
@@ -260,9 +245,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
         }}>
           <NavCard
             color="green"
-            icon={
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="M7 7l5 5" strokeDasharray="2 2"/><path d="M17 7l-5 5" strokeDasharray="2 2"/></svg>
-            }
+            icon={<Map size={22} />}
             title="Mapa Curricular"
             desc="Visualizá el árbol completo de materias y dependencias de tu carrera."
             cta="Ir al Mapa"
@@ -270,9 +253,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
           />
           <NavCard
             color="orange"
-            icon={
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 17l4-8 4 4 4-6 4 4"/><circle cx="7" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="11" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="currentColor" stroke="none"/></svg>
-            }
+            icon={<BarChart3 size={22} />}
             title="Estadísticas"
             desc="Analizá tu progreso, promedio y estado por categoría y título."
             cta="Ver Stats"
@@ -280,9 +261,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
           />
           <NavCard
             color="blue"
-            icon={
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21c0-4 2.7-6 6-6"/><circle cx="17" cy="13" r="3"/><path d="M13.5 21c0-2.5 1.5-4 3.5-4s3.5 1.5 3.5 4"/></svg>
-            }
+            icon={<Users size={22} />}
             title="Amigos"
             desc="Compará tu progreso con el de tus compañeros y encontrá nuevos."
             cta="Ver Amigos"
@@ -483,9 +462,7 @@ const NavCard: React.FC<{
         position: 'relative',
       }}>
         {cta}
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" style={{ transition: 'transform 0.15s' }}>
-          <path d="M3 8h10M9 4l4 4-4 4"/>
-        </svg>
+        <ArrowRight size={14} style={{ transition: 'transform 0.15s' }} />
       </div>
     </div>
   );

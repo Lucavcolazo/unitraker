@@ -110,8 +110,8 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
   // Profile view (how others see you)
   if (!showSettings) {
     return (
-      <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Geist', sans-serif" }}>
-        <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+      <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Syne', sans-serif" }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
           {/* Header with gear */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -134,7 +134,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                 padding: '6px 12px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)',
                 color: 'rgba(255,255,255,0.4)', cursor: 'pointer',
-                fontSize: '11px', fontWeight: 600, fontFamily: "'Geist', sans-serif",
+                fontSize: '11px', fontWeight: 600, fontFamily: "'Syne', sans-serif",
               }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; }}
@@ -347,8 +347,8 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
   const selectedIconNode = ICONS.find(i => i.name === profileIcon)?.icon || <User size={18} />;
 
   return (
-    <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Geist', sans-serif" }}>
-      <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+    <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Syne', sans-serif" }}>
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
           <button onClick={() => setShowSettings(false)} style={{
@@ -397,7 +397,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
               style={{
                 width: '100%', padding: '10px 12px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)',
-                color: 'rgba(255,255,255,0.85)', fontSize: '13px', fontFamily: "'Geist', sans-serif",
+                color: 'rgba(255,255,255,0.85)', fontSize: '13px', fontFamily: "'Syne', sans-serif",
                 outline: 'none',
               }}
               onFocus={e => e.currentTarget.style.borderColor = `${profileColor}60`}
@@ -417,7 +417,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
               style={{
                 width: '100%', padding: '10px 12px', borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)',
-                color: 'rgba(255,255,255,0.85)', fontSize: '13px', fontFamily: "'Geist', sans-serif",
+                color: 'rgba(255,255,255,0.85)', fontSize: '13px', fontFamily: "'Syne', sans-serif",
                 outline: 'none',
               }}
               onFocus={e => e.currentTarget.style.borderColor = `${profileColor}60`}
@@ -461,7 +461,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                             style={{
                               padding: '5px 10px', borderRadius: '6px', border: 'none',
                               background: 'rgba(59,130,246,0.12)', color: 'rgba(59,130,246,0.8)',
-                              fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Geist', sans-serif",
+                              fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Syne', sans-serif",
                             }}
                           >
                             Usar
@@ -475,7 +475,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                               style={{
                                 padding: '4px 8px', borderRadius: '4px', border: 'none',
                                 background: 'rgba(239,68,68,0.2)', color: 'rgba(239,68,68,0.9)',
-                                fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Geist', sans-serif",
+                                fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Syne', sans-serif",
                               }}
                             >
                               Sí
@@ -485,7 +485,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                               style={{
                                 padding: '4px 8px', borderRadius: '4px', border: 'none',
                                 background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)',
-                                fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Geist', sans-serif",
+                                fontSize: '10px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Syne', sans-serif",
                               }}
                             >
                               No
@@ -516,7 +516,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                         border: '1px dashed rgba(255,255,255,0.08)', background: 'transparent',
                         color: 'rgba(59,130,246,0.8)', fontSize: '11px', fontWeight: 600,
                         cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                        fontFamily: "'Geist', sans-serif",
+                        fontFamily: "'Syne', sans-serif",
                       }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'; e.currentTarget.style.background = 'rgba(59,130,246,0.05)'; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.background = 'transparent'; }}
@@ -544,7 +544,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                   onClick={() => setDegreeTrack(opt.id)}
                   style={{
                     flex: 1, padding: '10px', borderRadius: '8px', cursor: 'pointer',
-                    fontSize: '11px', fontWeight: 600, fontFamily: "'Geist', sans-serif",
+                    fontSize: '11px', fontWeight: 600, fontFamily: "'Syne', sans-serif",
                     border: degreeTrack === opt.id ? `1px solid ${profileColor}50` : '1px solid rgba(255,255,255,0.06)',
                     background: degreeTrack === opt.id ? `${profileColor}10` : 'rgba(255,255,255,0.02)',
                     color: degreeTrack === opt.id ? profileColor : 'rgba(255,255,255,0.4)',
@@ -615,7 +615,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                 flex: 1, padding: '10px', borderRadius: '8px', border: 'none',
                 background: saved ? 'rgba(34,197,94,0.15)' : `linear-gradient(135deg, ${profileColor}e0, ${profileColor}b0)`,
                 color: saved ? 'rgba(34,197,94,0.9)' : 'white',
-                fontSize: '12px', fontWeight: 700, fontFamily: "'Geist', sans-serif",
+                fontSize: '12px', fontWeight: 700, fontFamily: "'Syne', sans-serif",
                 cursor: saving ? 'wait' : 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                 transition: 'all 0.2s ease',
@@ -634,7 +634,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
                 border: '1px solid rgba(239,68,68,0.15)',
                 background: 'rgba(239,68,68,0.05)',
                 color: 'rgba(239,68,68,0.7)',
-                fontSize: '12px', fontWeight: 600, fontFamily: "'Geist', sans-serif",
+                fontSize: '12px', fontWeight: 600, fontFamily: "'Syne', sans-serif",
                 cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '6px',
                 transition: 'all 0.2s ease',

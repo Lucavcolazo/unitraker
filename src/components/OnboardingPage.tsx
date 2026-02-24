@@ -30,7 +30,7 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: "'Geist', sans-serif",
+      fontFamily: "'Syne', sans-serif",
     }}>
       {/* Background glow */}
       <div style={{
@@ -38,7 +38,7 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
         width: '400px',
         height: '400px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 70%)',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -63,13 +63,13 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
           transition={{ delay: 0.1 }}
           style={{
             width: 48, height: 48, borderRadius: '12px',
-            background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(168,85,247,0.15))',
-            border: '1px solid rgba(59,130,246,0.2)',
+            background: 'linear-gradient(135deg, rgba(34,197,94,0.12), rgba(99,102,241,0.12))',
+            border: '1px solid rgba(34,197,94,0.15)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             margin: '0 auto 20px',
           }}
         >
-          <GraduationCap size={22} style={{ color: 'rgba(59,130,246,0.8)' }} />
+          <GraduationCap size={22} style={{ color: 'rgba(34,197,94,0.8)' }} />
         </motion.div>
 
         <h1 style={{
@@ -80,8 +80,9 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
           ¡Bienvenido a UniTraker!
         </h1>
         <p style={{
-          fontSize: '13px', color: 'rgba(255,255,255,0.35)',
+          fontSize: '12px', color: '#52525b',
           margin: '0 0 32px', lineHeight: 1.5,
+          fontFamily: "'DM Mono', monospace", fontWeight: 400,
         }}>
           Elegí un plan de estudios para empezar a trackear tu progreso
         </p>
@@ -106,7 +107,7 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
               alignItems: 'center',
               gap: '14px',
               transition: 'all 0.2s ease',
-              fontFamily: "'Geist', sans-serif",
+              fontFamily: "'Syne', sans-serif",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.4)'; e.currentTarget.style.background = 'rgba(59,130,246,0.08)'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.2)'; e.currentTarget.style.background = 'rgba(59,130,246,0.05)'; }}
@@ -127,7 +128,7 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
               <div style={{ fontSize: '14px', fontWeight: 700, color: 'rgba(255,255,255,0.85)', marginBottom: '3px' }}>
                 Ing. en Sistemas 2024
               </div>
-              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>
+              <div style={{ fontSize: '11px', color: '#52525b', fontFamily: "'DM Mono', monospace", fontWeight: 400 }}>
                 Plan predefinido con todas las materias ya cargadas
               </div>
             </div>
@@ -150,7 +151,7 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
               alignItems: 'center',
               gap: '14px',
               transition: 'all 0.2s ease',
-              fontFamily: "'Geist', sans-serif",
+              fontFamily: "'Syne', sans-serif",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(168,85,247,0.3)'; e.currentTarget.style.background = 'rgba(168,85,247,0.06)'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(168,85,247,0.15)'; e.currentTarget.style.background = 'rgba(168,85,247,0.03)'; }}
@@ -167,7 +168,7 @@ export const OnboardingPage: React.FC<Props> = ({ onComplete, onCreateCustom }) 
               <div style={{ fontSize: '14px', fontWeight: 700, color: 'rgba(255,255,255,0.85)', marginBottom: '3px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 Crear mi plan <Sparkles size={12} style={{ color: 'rgba(168,85,247,0.6)' }} />
               </div>
-              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>
+              <div style={{ fontSize: '11px', color: '#52525b', fontFamily: "'DM Mono', monospace", fontWeight: 400 }}>
                 Armá tu propio plan con las materias de tu carrera
               </div>
             </div>

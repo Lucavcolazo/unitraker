@@ -42,10 +42,10 @@ export const ProgressSummary: React.FC = () => {
         alignItems: 'baseline',
         padding: '0 2px',
       }}>
-        <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.01em' }}>
+        <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.01em', fontFamily: "'DM Mono', monospace" }}>
           {label}
         </span>
-        <span style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.7)' }}>
+        <span style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.7)', fontFamily: "'DM Mono', monospace" }}>
           {approved}/{total}
           <span style={{ fontSize: '9px', fontWeight: 500, color: 'rgba(255,255,255,0.3)', marginLeft: '4px' }}>
             ({percent}%)

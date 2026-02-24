@@ -5,7 +5,7 @@ const SPINNER = (
   <div style={{
     height: '100vh', background: 'var(--bg-base)',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: "'Syne', sans-serif",
   }}>
     <div style={{
       width: 32, height: 32,

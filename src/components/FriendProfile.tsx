@@ -61,11 +61,11 @@ const MiniDonut: React.FC<{
           />
         );
       })}
-      <text x={size / 2} y={size / 2 - 6} textAnchor="middle" fill="rgba(255,255,255,0.9)" fontSize="22" fontWeight="700" fontFamily="Geist, sans-serif">
+      <text x={size / 2} y={size / 2 - 6} textAnchor="middle" fill="rgba(255,255,255,0.9)" fontSize="22" fontWeight="700" fontFamily="Syne, sans-serif">
         {centerValue}
       </text>
       {centerLabel && (
-        <text x={size / 2} y={size / 2 + 14} textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="Geist, sans-serif">
+        <text x={size / 2} y={size / 2 + 14} textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="Syne, sans-serif">
           {centerLabel}
         </text>
       )}
@@ -94,7 +94,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
 
   if (!friendProfile) {
     return (
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Geist', sans-serif" }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Syne', sans-serif" }}>
         <div style={{ width: 24, height: 24, border: '2px solid rgba(59,130,246,0.15)', borderTopColor: 'rgba(59,130,246,0.7)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
         <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -131,7 +131,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
   // ─── Vista perfil (uniforme: nombre, icono, subtítulo, total, aprobadas, finales, plan, promedio)
   if (!compareMode) {
     return (
-      <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Geist', sans-serif" }}>
+      <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Syne', sans-serif" }}>
         <div style={{ maxWidth: '480px', margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -157,7 +157,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
                   background: copied ? 'rgba(34,197,94,0.2)' : 'rgba(59,130,246,0.15)',
                   color: copied ? 'rgba(34,197,94,0.9)' : 'rgba(59,130,246,0.9)',
                   fontSize: '11px', fontWeight: 600, cursor: copying ? 'wait' : 'pointer',
-                  fontFamily: "'Geist', sans-serif",
+                  fontFamily: "'Syne', sans-serif",
                 }}
               >
                 <Copy size={12} />
@@ -291,7 +291,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
   ];
 
   return (
-    <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Geist', sans-serif" }}>
+    <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Syne', sans-serif" }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
           <button onClick={onBack} style={{

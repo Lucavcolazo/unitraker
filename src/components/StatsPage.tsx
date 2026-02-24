@@ -105,7 +105,7 @@ const DonutChart: React.FC<{
             fill="rgba(255,255,255,0.9)"
             fontSize="30"
             fontWeight="700"
-            fontFamily="Geist, sans-serif"
+            fontFamily="Syne, sans-serif"
           >
             {centerValue}
           </text>
@@ -117,7 +117,7 @@ const DonutChart: React.FC<{
               fill="rgba(255,255,255,0.45)"
               fontSize="12"
               fontWeight="500"
-              fontFamily="Geist, sans-serif"
+              fontFamily="Syne, sans-serif"
             >
               {centerLabel}
             </text>
@@ -140,8 +140,8 @@ const HorizontalBar: React.FC<{
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
-        <span style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>{label}</span>
-        <span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
+        <span style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 500, fontFamily: "'DM Mono', monospace" }}>{label}</span>
+        <span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>
           {value}/{total}
         </span>
       </div>
@@ -195,7 +195,7 @@ const SubjectList: React.FC<{
           border: 'none',
           cursor: 'pointer',
           color: 'rgba(255,255,255,0.7)',
-          fontFamily: "'Geist', sans-serif",
+          fontFamily: "'Syne', sans-serif",
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -264,7 +264,7 @@ const SubjectList: React.FC<{
                     fontSize: '9px',
                     color: 'rgba(255,255,255,0.25)',
                   }}>
-                    {s.year}° Año · {s.semester}° Cuat
+                    <span style={{ fontFamily: "'DM Mono', monospace" }}>{s.year}° Año · {s.semester}° Cuat</span>
                   </span>
                 </motion.div>
               ))}
@@ -354,7 +354,7 @@ export const StatsPage: React.FC = () => {
       flex: 1,
       overflow: 'auto',
       padding: '24px',
-      fontFamily: "'Geist', sans-serif",
+      fontFamily: "'Syne', sans-serif",
     }}>
       <div style={{
         maxWidth: '1100px',
@@ -390,14 +390,14 @@ export const StatsPage: React.FC = () => {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: config.color }}>
                   {config.icon}
-                  <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', fontFamily: "'DM Mono', monospace" }}>
                     {config.label}
                   </span>
                 </div>
                 <div style={{ fontSize: '34px', fontWeight: 800, color: config.color, lineHeight: 1.1 }}>
                   <AnimatedNumber value={count} delay={delay} />
                 </div>
-                <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>
+                <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', fontFamily: "'DM Mono', monospace" }}>
                   de {stats.total} materias
                 </div>
               </motion.div>
@@ -417,7 +417,7 @@ export const StatsPage: React.FC = () => {
               gap: '8px',
             }}
           >
-            <div style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>
+            <div style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', fontFamily: "'DM Mono', monospace" }}>
               Promedio
             </div>
             <div style={{ fontSize: '34px', fontWeight: 800, color: '#4ADE80', lineHeight: 1.1 }}>
@@ -439,7 +439,7 @@ export const StatsPage: React.FC = () => {
                 fontSize: '10px',
                 fontWeight: 600,
                 cursor: 'pointer',
-                fontFamily: "'Geist', sans-serif",
+                fontFamily: "'Syne', sans-serif",
                 alignSelf: 'flex-start',
               }}
             >
@@ -542,7 +542,7 @@ export const StatsPage: React.FC = () => {
                     Analista en Sistemas
                   </span>
                   <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-                    {stats.analystApproved.length}/{stats.analystAll.length} materias
+                    <span style={{ fontFamily: "'DM Mono', monospace" }}>{stats.analystApproved.length}/{stats.analystAll.length} materias</span>
                   </span>
                 </div>
                 <HorizontalBar
@@ -560,7 +560,7 @@ export const StatsPage: React.FC = () => {
                     Ingeniería en Sistemas
                   </span>
                   <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-                    {stats.engApproved.length}/{stats.engAll.length} materias
+                    <span style={{ fontFamily: "'DM Mono', monospace" }}>{stats.engApproved.length}/{stats.engAll.length} materias</span>
                   </span>
                 </div>
                 <HorizontalBar

@@ -72,7 +72,7 @@ const SubjectCard: React.FC<{
         textAlign: 'center',
         position: 'relative',
         transition: 'all 0.2s ease',
-        fontFamily: "'Geist', sans-serif",
+        fontFamily: "'Syne', sans-serif",
       }}
     >
       {/* Lock icon */}
@@ -155,6 +155,7 @@ const SubjectCard: React.FC<{
         color: 'rgba(255,255,255,0.2)',
         textTransform: 'uppercase',
         letterSpacing: '0.03em',
+        fontFamily: "'DM Mono', monospace",
       }}>
         {isLocked ? (
           <span>Bloqueada</span>
@@ -225,6 +226,7 @@ const SemesterRow: React.FC<{
         textTransform: 'uppercase',
         whiteSpace: 'nowrap',
         lineHeight: '1.4',
+        fontFamily: "'DM Mono', monospace",
       }}>
         {label}
       </div>
@@ -374,7 +376,7 @@ export const CurriculumMap: React.FC = () => {
         flex: 1,
         overflow: 'auto',
         background: 'var(--bg-base)',
-        fontFamily: "'Geist', sans-serif",
+        fontFamily: "'Syne', sans-serif",
         position: 'relative',
       }}
     >
@@ -513,7 +515,7 @@ export const CurriculumMap: React.FC = () => {
         <div style={{
           textAlign: 'center', fontSize: '9px', fontWeight: 600,
           color: 'rgba(255,255,255,0.3)', padding: '2px 0',
-          letterSpacing: '0.02em', fontFamily: "'Geist', sans-serif",
+          letterSpacing: '0.02em', fontFamily: "'DM Mono', monospace",
         }}>
           {zoom}%
         </div>

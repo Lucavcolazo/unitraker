@@ -91,7 +91,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
       flexDirection: 'column',
       background: 'var(--bg-base)',
       color: 'rgba(255,255,255,0.85)',
-      fontFamily: "'Geist', sans-serif",
+      fontFamily: "'Syne', sans-serif",
       overflow: 'hidden',
     }}>
       {/* Header */}
@@ -131,6 +131,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
             <p style={{
               fontSize: '9px', color: 'rgba(255,255,255,0.25)',
               margin: 0, letterSpacing: '0.03em',
+              fontFamily: "'DM Mono', monospace",
             }}>
               {profile?.degree_track === 'analista' ? 'Analista en Sistemas' : 'Ingeniería en Sistemas'}
             </p>
@@ -151,7 +152,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
                   color: 'rgba(255,255,255,0.85)',
                   fontSize: '11px',
                   fontWeight: 600,
-                  fontFamily: "'Geist', sans-serif",
+                  fontFamily: "'Syne', sans-serif",
                   outline: 'none',
                   cursor: 'pointer',
                   appearance: 'none',
@@ -166,8 +167,11 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
           )}
         </div>
 
-        {/* Center: Section Tabs — solo texto e iconos; seleccionado en blanco */}
+        {/* Center: Section Tabs — centered absolutely */}
         <div style={{
+          position: 'absolute',
+          left: '50%',
+          transform: 'translateX(-50%)',
           display: 'flex',
           alignItems: 'center',
           gap: '20px',
@@ -186,7 +190,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
                 cursor: 'pointer',
                 fontSize: '12px',
                 fontWeight: 500,
-                fontFamily: "'Geist', sans-serif",
+                fontFamily: "'Syne', sans-serif",
                 color: section === tab.id ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.4)',
                 transition: 'color 0.2s ease',
                 position: 'relative',
@@ -217,6 +221,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
           <div style={{
             display: 'flex', gap: '12px',
             fontSize: '10px', fontWeight: 500, letterSpacing: '0.03em',
+            fontFamily: "'DM Mono', monospace",
             opacity: section === 'map' ? 1 : 0,
             transition: 'opacity 0.3s ease',
             pointerEvents: section === 'map' ? 'auto' : 'none',
@@ -242,7 +247,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
               border: section === 'settings' ? `1.5px solid ${profileColor}40` : '1.5px solid rgba(255,255,255,0.06)',
               background: section === 'settings' ? `${profileColor}08` : 'rgba(255,255,255,0.02)',
               cursor: 'pointer', transition: 'all 0.2s ease',
-              fontFamily: "'Geist', sans-serif",
+              fontFamily: "'Syne', sans-serif",
             }}
             onMouseEnter={e => { if (section !== 'settings') e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
             onMouseLeave={e => { if (section !== 'settings') e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; }}

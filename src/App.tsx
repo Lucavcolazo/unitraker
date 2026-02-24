@@ -21,7 +21,7 @@ const SPINNER = (
   <div style={{
     height: '100vh', background: 'var(--bg-base)',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: "'Syne', sans-serif",
   }}>
     <div style={{
       width: 32, height: 32,
@@ -39,7 +39,7 @@ const SPINNER_WITH_TEXT = (
     height: '100vh', background: 'var(--bg-base)',
     display: 'flex', flexDirection: 'column',
     alignItems: 'center', justifyContent: 'center',
-    fontFamily: "'Geist', sans-serif", gap: '12px',
+    fontFamily: "'Syne', sans-serif", gap: '12px',
   }}>
     <div style={{
       width: 32, height: 32,
@@ -94,7 +94,7 @@ const SPINNER_PREPARING = (
     height: '100vh', background: 'var(--bg-base)',
     display: 'flex', flexDirection: 'column',
     alignItems: 'center', justifyContent: 'center',
-    fontFamily: "'Geist', sans-serif", gap: '12px',
+    fontFamily: "'Syne', sans-serif", gap: '12px',
   }}>
     <div style={{
       width: 32, height: 32,

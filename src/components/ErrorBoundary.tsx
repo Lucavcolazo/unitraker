@@ -35,7 +35,7 @@ export class ErrorBoundary extends Component<Props, State> {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '24px',
-            fontFamily: "'Geist', sans-serif",
+            fontFamily: "'Syne', sans-serif",
             color: 'rgba(255,255,255,0.85)',
           }}
         >

@@ -81,7 +81,7 @@ export const SubjectNode: React.FC<NodeProps<SubjectNodeType>> = ({ data, id }) 
         textAlign: 'center',
         position: 'relative',
         transition: 'all 0.2s ease',
-        fontFamily: "'Geist', sans-serif",
+        fontFamily: "'Syne', sans-serif",
       }}
       onMouseEnter={(e) => {
         if (!isLocked) {
@@ -178,6 +178,7 @@ export const SubjectNode: React.FC<NodeProps<SubjectNodeType>> = ({ data, id }) 
         color: isLocked ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.25)',
         letterSpacing: '0.03em',
         textTransform: 'uppercase',
+        fontFamily: "'DM Mono', monospace",
       }}>
         {statusLabel[status] && !isLocked && (
           <span style={{ color: style.text }}>
