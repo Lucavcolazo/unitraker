@@ -58,14 +58,7 @@ interface FriendsState {
     clearFriendView: () => void;
 }
 
-function parseGradeFinals(val: unknown): number[] {
-    if (Array.isArray(val)) return val.map(Number).filter((n) => !Number.isNaN(n));
-    if (typeof val === 'string') {
-        const parsed = val.replace(/[{}]/g, '').split(',').map((s) => Number(s.trim())).filter((n) => !Number.isNaN(n));
-        return parsed;
-    }
-    return [];
-}
+
 
 export const useFriendsStore = create<FriendsState>((set, get) => ({
     friends: [],
@@ -259,18 +252,16 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
         // Load subject states and grades (para promedio del amigo)
         const { data: states } = await supabase
             .from('subject_states')
-            .select('subject_id, status, grade_direct, grade_finals')
+            .select('subject_id, status, grade_direct')
             .eq('user_id', friendId);
 
         const stateMap: Record<string, SubjectStatus> = {};
         const gradesMap: Record<string, number> = {};
         if (states) {
-            states.forEach((row: { subject_id: string; status: string; grade_direct?: number | null; grade_finals?: number[] | string | null }) => {
+            states.forEach((row: { subject_id: string; status: string; grade_direct?: number | null }) => {
                 stateMap[row.subject_id] = row.status as SubjectStatus;
                 const direct = row.grade_direct != null ? Number(row.grade_direct) : null;
-                const finals = parseGradeFinals(row.grade_finals);
-                const efectiva = direct ?? (finals.length > 0 ? finals[finals.length - 1] : null);
-                if (efectiva != null) gradesMap[row.subject_id] = efectiva;
+                if (direct != null) gradesMap[row.subject_id] = direct;
             });
         }
 

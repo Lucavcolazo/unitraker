@@ -25,13 +25,7 @@ export const LoadGradesModal: React.FC<LoadGradesModalProps> = ({ open, onClose,
   useEffect(() => {
     if (!subjectId) return;
     const g = subjectGrades[subjectId];
-    const efectiva = g
-      ? (g.grade_direct != null
-          ? g.grade_direct
-          : g.grade_finals && g.grade_finals.length > 0
-            ? g.grade_finals[g.grade_finals.length - 1]
-            : null)
-      : null;
+    const efectiva = g?.grade_direct ?? null;
     setGrade(efectiva != null ? String(efectiva) : '');
   }, [subjectId, subjectGrades]);
 

@@ -2,10 +2,9 @@ import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import { curriculum, type SubjectStatus } from '../data/curriculum';
 
-/** Nota por materia (una vez aprobada). Se guarda en grade_direct; grade_finals se mantiene vacío. */
+/** Nota por materia (una vez aprobada). Se guarda en grade_direct. */
 export interface SubjectGrades {
     grade_direct: number | null;
-    grade_finals: number[];
 }
 
 export interface GradeAverages {
@@ -45,7 +44,7 @@ export const useStudyStore = create<StudyState>((set, get) => ({
 
         const { data, error } = await supabase
             .from('subject_states')
-            .select('subject_id, status, grade_direct, grade_finals')
+            .select('subject_id, status, grade_direct')
             .eq('user_id', userId);
 
         if (error) {
@@ -60,18 +59,11 @@ export const useStudyStore = create<StudyState>((set, get) => ({
         curriculum.forEach(s => { states[s.id] = 'pending'; });
 
         if (data) {
-            data.forEach((row: { subject_id: string; status: string; grade_direct?: number | null; grade_finals?: number[] | string | null }) => {
+            data.forEach((row: { subject_id: string; status: string; grade_direct?: number | null }) => {
                 states[row.subject_id] = row.status as SubjectStatus;
                 const gDirect = row.grade_direct != null ? Number(row.grade_direct) : null;
-                let gFinals: number[] = [];
-                if (Array.isArray(row.grade_finals)) {
-                    gFinals = row.grade_finals.map(Number).filter((n) => !Number.isNaN(n));
-                } else if (typeof row.grade_finals === 'string') {
-                    const parsed = row.grade_finals.replace(/[{}]/g, '').split(',').map((s) => Number(s.trim())).filter((n) => !Number.isNaN(n));
-                    if (parsed.length > 0) gFinals = parsed;
-                }
-                if (gDirect != null || gFinals.length > 0) {
-                    grades[row.subject_id] = { grade_direct: gDirect ?? null, grade_finals: gFinals };
+                if (gDirect != null) {
+                    grades[row.subject_id] = { grade_direct: gDirect };
                 }
             });
         }
@@ -113,7 +105,6 @@ export const useStudyStore = create<StudyState>((set, get) => ({
                 subject_id: subjectId,
                 status: 'approved',
                 grade_direct: grade,
-                grade_finals: [],
             }, { onConflict: 'user_id,subject_id' });
 
         if (error) {
@@ -125,7 +116,7 @@ export const useStudyStore = create<StudyState>((set, get) => ({
             subjectStates: { ...subjectStates, [subjectId]: 'approved' },
             subjectGrades: {
                 ...subjectGrades,
-                [subjectId]: { grade_direct: grade, grade_finals: [] },
+                [subjectId]: { grade_direct: grade },
             },
         });
     },
@@ -136,7 +127,7 @@ export const useStudyStore = create<StudyState>((set, get) => ({
         const withGrades = ids.filter(id => {
             const g = subjectGrades[id];
             if (!g) return false;
-            return g.grade_direct != null || g.grade_finals.length > 0;
+            return g.grade_direct != null;
         });
 
         if (withGrades.length === 0) {
@@ -145,9 +136,7 @@ export const useStudyStore = create<StudyState>((set, get) => ({
 
         const notas = withGrades.map(id => {
             const g = subjectGrades[id]!;
-            return g.grade_direct != null
-                ? g.grade_direct
-                : (g.grade_finals[g.grade_finals.length - 1] ?? 0);
+            return g.grade_direct ?? 0;
         });
         const sum = notas.reduce((a, b) => a + b, 0);
 
