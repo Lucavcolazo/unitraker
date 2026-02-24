@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { DashboardLayout } from './components/DashboardLayout';
+import { HomePage } from './components/HomePage';
 import { CurriculumMap } from './components/CurriculumMap';
 import { StatsPage } from './components/StatsPage';
 import { WelcomePage } from './components/WelcomePage';
@@ -14,7 +15,7 @@ import { AuthGuard } from './components/AuthGuard';
 import { useStudyStore } from './store/useStudyStore';
 import { usePlanStore } from './store/usePlanStore';
 
-export type Section = 'map' | 'stats' | 'friends' | 'settings';
+export type Section = 'home' | 'map' | 'stats' | 'friends' | 'settings';
 
 const SPINNER = (
   <div style={{
@@ -133,7 +134,7 @@ function AppRoute() {
 
   // /app o /app/ algo no reconocido → redirigir a /app/map
   if (path === '/app' || path === '/app/') {
-    return <Navigate to="/app/map" replace />;
+    return <Navigate to="/app/home" replace />;
   }
 
   // /app/crear-plan → vista Próximamente (desde configuración)
@@ -164,15 +165,16 @@ function AppContentWithSection() {
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;
-  const sectionFromPath = (path.replace(/^\/app\/?/, '') || 'map') as Section;
-  const section: Section = ['map', 'stats', 'friends', 'settings'].includes(sectionFromPath)
+  const sectionFromPath = (path.replace(/^\/app\/?/, '') || 'home') as Section;
+  const section: Section = ['home', 'map', 'stats', 'friends', 'settings'].includes(sectionFromPath)
     ? sectionFromPath
-    : 'map';
+    : 'home';
 
   const setSection = (s: Section) => navigate(`/app/${s}`);
 
   const renderSection = () => {
     switch (section) {
+      case 'home': return <HomePage onNavigate={setSection} />;
       case 'map': return <CurriculumMap />;
       case 'stats': return <StatsPage />;
       case 'friends': return (

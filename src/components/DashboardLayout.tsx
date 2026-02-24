@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ProgressSummary } from './ProgressSummary';
-import { Map, BarChart3, Users, Settings, User, ChevronDown } from 'lucide-react';
+import { Home, Map, BarChart3, Users, Settings, User, ChevronDown } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriendsStore } from '../store/useFriendsStore';
 import { usePlanStore } from '../store/usePlanStore';
@@ -74,6 +74,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
   }, [pendingRequests]);
 
   const tabs: { id: Section; label: string; icon: React.ReactNode; badge?: number }[] = [
+    { id: 'home', label: 'Inicio', icon: <Home size={14} /> },
     { id: 'map', label: 'Mapa', icon: <Map size={14} /> },
     { id: 'stats', label: 'Estadísticas', icon: <BarChart3 size={14} /> },
     { id: 'friends', label: 'Amigos', icon: <Users size={14} />, badge: pendingCount },
