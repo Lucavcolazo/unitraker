@@ -108,34 +108,14 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
         flexShrink: 0,
       }}>
         {/* Left: Logo + Title + Plan selector */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{
-            width: 30,
-            height: 30,
-            borderRadius: '7px',
-            background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(168,85,247,0.15))',
-            border: '1px solid rgba(59,130,246,0.15)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <GraduationCap size={18} style={{ color: 'rgba(255,255,255,0.85)' }} />
+          <h1 style={{
+            fontSize: '14px', fontWeight: 700,
+            color: 'rgba(255,255,255,0.9)', margin: 0, letterSpacing: '-0.01em',
           }}>
-            <GraduationCap size={15} style={{ color: 'rgba(59,130,246,0.7)' }} />
-          </div>
-          <div>
-            <h1 style={{
-              fontSize: '14px', fontWeight: 700,
-              color: 'rgba(255,255,255,0.9)', margin: 0, letterSpacing: '-0.01em',
-            }}>
-              UniTraker
-            </h1>
-            <p style={{
-              fontSize: '9px', color: 'rgba(255,255,255,0.25)',
-              margin: 0, letterSpacing: '0.03em',
-              fontFamily: "'DM Mono', monospace",
-            }}>
-              {profile?.degree_track === 'analista' ? 'Analista en Sistemas' : 'Ingeniería en Sistemas'}
-            </p>
-          </div>
+            UniTraker
+          </h1>
           {showPlanSelector && (
             <div style={{ position: 'relative' }}>
               <select

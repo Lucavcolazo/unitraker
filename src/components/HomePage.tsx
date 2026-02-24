@@ -109,6 +109,12 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
   const displayName = profile?.display_name || 'Usuario';
 
+  const [heroVisible, setHeroVisible] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setHeroVisible(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div style={{
       flex: 1,
@@ -136,6 +142,10 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             display: 'flex',
             alignItems: 'center',
             gap: 8,
+            opacity: heroVisible ? 1 : 0,
+            maxHeight: heroVisible ? 30 : 0,
+            overflow: 'hidden',
+            transition: 'opacity 0.8s ease, max-height 0.8s ease, margin-bottom 0.8s ease',
           }}>
             <span style={{ width: 20, height: 1, background: V.green, display: 'inline-block' }} />
             Bienvenido de vuelta
@@ -196,7 +206,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
           {/* Final Pendiente */}
           <div style={{ background: V.surface, padding: '22px 24px', display: 'flex', flexDirection: 'column', gap: 4 }}>
             <div style={{ fontFamily: fontMono, fontSize: 10, letterSpacing: 1.5, textTransform: 'uppercase', color: V.muted }}>
-              Final Pendiente
+              {stats.final === 1 ? 'Final Pendiente' : 'Finales Pendientes'}
             </div>
             <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: -1, lineHeight: 1, color: V.orange }}>
               <AnimatedNumber value={stats.final} delay={200} />
@@ -300,7 +310,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
         {/* ═══ PENDING FINALS ═══ */}
         {stats.finalSubjects.length > 0 && (
           <div style={{ animation: 'homeFadeUp 0.5s ease 0.4s both' }}>
-            <SectionHeader title="Finales Pendientes" />
+            <SectionHeader title={stats.finalSubjects.length === 1 ? 'Final Pendiente' : 'Finales Pendientes'} />
             {stats.finalSubjects.map(s => (
               <div key={s.id} style={{
                 background: V.surface,
@@ -398,6 +408,8 @@ const NavCard: React.FC<{
         transition: 'all 0.2s',
         position: 'relative',
         overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column' as const,
       }}
       onMouseEnter={e => {
         e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)';
@@ -447,6 +459,7 @@ const NavCard: React.FC<{
         fontWeight: 400,
         marginBottom: 24,
         position: 'relative',
+        flex: 1,
       }}>
         {desc}
       </div>

@@ -196,7 +196,7 @@ export const ProfileSettings: React.FC<Props> = ({ onBack, onOpenPlanEditor }) =
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '16px' }}>
             {[
               { label: 'Aprobadas', value: approved, color: '#4ADE80', icon: <CheckCircle2 size={13} /> },
-              { label: 'Final pend.', value: finals, color: '#FB923C', icon: <FileText size={13} /> },
+              { label: finals === 1 ? 'Final pend.' : 'Finales pend.', value: finals, color: '#FB923C', icon: <FileText size={13} /> },
               { label: 'Total', value: total, color: 'rgba(255,255,255,0.5)', icon: <GraduationCap size={13} /> },
               { label: 'Amigos', value: friends.length, color: '#60A5FA', icon: <Users size={13} /> },
             ].map(s => (

@@ -17,9 +17,9 @@ import {
 } from 'lucide-react';
 import { LoadGradesModal } from './LoadGradesModal';
 
-const STATUS_CONFIG: Record<SubjectStatus, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
+const STATUS_CONFIG: Record<SubjectStatus, { label: string; labelPlural?: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
   approved: { label: 'Aprobadas', color: '#4ADE80', bg: 'rgba(74, 222, 128, 0.05)', border: 'rgba(74, 222, 128, 0.35)', icon: <CheckCircle2 size={14} /> },
-  final: { label: 'Final pendiente', color: '#FB923C', bg: 'rgba(251, 146, 60, 0.05)', border: 'rgba(251, 146, 60, 0.35)', icon: <FileText size={14} /> },
+  final: { label: 'Final pendiente', labelPlural: 'Finales pendientes', color: '#FB923C', bg: 'rgba(251, 146, 60, 0.05)', border: 'rgba(251, 146, 60, 0.35)', icon: <FileText size={14} /> },
   pending: { label: 'Pendientes', color: 'rgba(255,255,255,0.35)', bg: 'var(--bg-surface)', border: 'var(--bg-border)', icon: <BookOpen size={14} /> },
 };
 
@@ -345,7 +345,7 @@ export const StatsPage: React.FC = () => {
 
   const donutSegments = [
     { value: stats.byStatus.approved.length, color: '#4ADE80', label: 'Aprobadas' },
-    { value: stats.byStatus.final.length, color: '#FB923C', label: 'Final pend.' },
+    { value: stats.byStatus.final.length, color: '#FB923C', label: stats.byStatus.final.length === 1 ? 'Final pend.' : 'Finales pend.' },
     { value: stats.byStatus.pending.length, color: 'rgba(255,255,255,0.12)', label: 'Pendientes' },
   ];
 
@@ -391,7 +391,7 @@ export const StatsPage: React.FC = () => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: config.color }}>
                   {config.icon}
                   <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', fontFamily: "'DM Mono', monospace" }}>
-                    {config.label}
+                    {count === 1 ? config.label : (config.labelPlural || config.label)}
                   </span>
                 </div>
                 <div style={{ fontSize: '34px', fontWeight: 800, color: config.color, lineHeight: 1.1 }}>
@@ -631,7 +631,7 @@ export const StatsPage: React.FC = () => {
             defaultOpen
           />
           <SubjectList
-            title="Final Pendiente"
+            title={stats.byStatus.final.length === 1 ? 'Final Pendiente' : 'Finales Pendientes'}
             subjects={stats.byStatus.final}
             icon={<FileText size={14} />}
             color="#FB923C"
