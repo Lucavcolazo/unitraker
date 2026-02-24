@@ -125,7 +125,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     }}>
       <style>{keyframesCSS}</style>
 
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '52px 32px 80px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 16px 80px' }}>
 
         {/* ═══ HERO ═══ */}
         <div style={{
@@ -151,7 +151,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             Bienvenido de vuelta
           </div>
           <h1 style={{
-            fontSize: 'clamp(36px, 5vw, 52px)',
+            fontSize: 'clamp(28px, 5vw, 52px)',
             fontWeight: 800,
             lineHeight: 1.1,
             letterSpacing: -1.5,
@@ -179,7 +179,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
         </div>
 
         {/* ═══ QUICK STATS BAR ═══ */}
-        <div style={{
+        <div className="grid-stats" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
           gap: 1,
@@ -187,7 +187,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
           border: `1px solid ${V.border}`,
           borderRadius: 14,
           overflow: 'hidden',
-          marginBottom: 48,
+          marginBottom: 36,
           animation: 'homeFadeUp 0.5s ease 0.1s both',
         }}>
           {/* Aprobadas */}
@@ -246,11 +246,11 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
         {/* ═══ SECTION CARDS ═══ */}
         <SectionHeader title="Secciones" />
 
-        <div style={{
+        <div className="grid-sections" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 16,
-          marginBottom: 48,
+          marginBottom: 36,
           animation: 'homeFadeUp 0.5s ease 0.2s both',
         }}>
           <NavCard
@@ -282,11 +282,11 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
         {/* ═══ CAREER PROGRESS ═══ */}
         <SectionHeader title="Progreso por Título" />
 
-        <div style={{
+        <div className="grid-career" style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: 16,
-          marginBottom: 48,
+          marginBottom: 36,
           animation: 'homeFadeUp 0.5s ease 0.3s both',
         }}>
           <CareerCard

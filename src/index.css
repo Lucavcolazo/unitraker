@@ -74,3 +74,64 @@
     display: none !important;
   }
 }
+
+/* ── Mobile Responsive ──────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Hide on mobile */
+  .mobile-hide { display: none !important; }
+
+  /* Grid overrides */
+  .grid-stats { grid-template-columns: repeat(2, 1fr) !important; }
+  .grid-sections { grid-template-columns: 1fr !important; }
+  .grid-career { grid-template-columns: 1fr !important; }
+  .grid-charts { grid-template-columns: 1fr !important; }
+  .grid-compare { grid-template-columns: 1fr !important; }
+
+  /* Bottom tab bar */
+  .bottom-tab-bar {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(8, 8, 12, 0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 6px 0 env(safe-area-inset-bottom, 8px);
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .bottom-tab-bar button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 9px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    transition: color 0.15s ease;
+  }
+
+  /* Header nav hidden on mobile */
+  .desktop-nav { display: none !important; }
+  .desktop-legend { display: none !important; }
+  .desktop-username { display: none !important; }
+
+  /* Progress summary stacks */
+  .progress-summary {
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding: 8px 16px !important;
+  }
+
+  /* Content padding for bottom bar */
+  .app-main {
+    padding-bottom: 64px !important;
+  }
+}

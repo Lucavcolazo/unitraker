@@ -127,7 +127,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
   // ─── Vista perfil (uniforme: nombre, icono, subtítulo, total, aprobadas, finales, plan, promedio)
   if (!compareMode) {
     return (
-      <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Syne', sans-serif" }}>
+      <div style={{ flex: 1, overflow: 'auto', padding: '16px', fontFamily: "'Syne', sans-serif" }}>
         <div style={{ maxWidth: '480px', margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -200,7 +200,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
               )}
             </div>
 
-            <div style={{
+            <div className="grid-stats" style={{
               width: '100%',
               display: 'grid',
               gridTemplateColumns: 'repeat(4, 1fr)',
@@ -287,7 +287,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
   ];
 
   return (
-    <div style={{ flex: 1, overflow: 'auto', padding: '24px', fontFamily: "'Syne', sans-serif" }}>
+    <div style={{ flex: 1, overflow: 'auto', padding: '16px', fontFamily: "'Syne', sans-serif" }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
           <button onClick={onBack} style={{
@@ -303,7 +303,7 @@ export const FriendProfile: React.FC<Props> = ({ friendId, onBack, compareMode =
           </h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', alignItems: 'start' }}>
+        <div className="grid-compare" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', alignItems: 'start' }}>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

@@ -353,7 +353,7 @@ export const StatsPage: React.FC = () => {
     <div style={{
       flex: 1,
       overflow: 'auto',
-      padding: '24px',
+      padding: '16px',
       fontFamily: "'Syne', sans-serif",
     }}>
       <div style={{
@@ -364,7 +364,7 @@ export const StatsPage: React.FC = () => {
         gap: '20px',
       }}>
         {/* Top: 4 módulos — Aprobadas, Final pend., Pendientes, Promedio (derecha) */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+        <div className="grid-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
           {([
             { status: 'approved' as SubjectStatus, delay: 0 },
             { status: 'final' as SubjectStatus, delay: 100 },
@@ -456,7 +456,7 @@ export const StatsPage: React.FC = () => {
         />
 
         {/* Charts Row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div className="grid-charts" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
           {/* Donut Chart */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}

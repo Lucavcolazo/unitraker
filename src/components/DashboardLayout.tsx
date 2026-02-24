@@ -147,8 +147,8 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
           )}
         </div>
 
-        {/* Center: Section Tabs — centered absolutely */}
-        <div style={{
+        {/* Center: Section Tabs — centered absolutely (hidden on mobile) */}
+        <div className="desktop-nav" style={{
           position: 'absolute',
           left: '50%',
           transform: 'translateX(-50%)',
@@ -197,8 +197,8 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
 
         {/* Right: Legend + User avatar */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          {/* Legend (only on map) */}
-          <div style={{
+          {/* Legend (only on map, hidden on mobile) */}
+          <div className="desktop-legend" style={{
             display: 'flex', gap: '12px',
             fontSize: '10px', fontWeight: 500, letterSpacing: '0.03em',
             fontFamily: "'DM Mono', monospace",
@@ -241,14 +241,14 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
             }}>
               {ICON_MAP[profileIcon] || <User size={12} />}
             </div>
-            <span style={{
+            <span className="desktop-username" style={{
               fontSize: '11px', fontWeight: 600,
               color: 'rgba(255,255,255,0.5)',
               maxWidth: '80px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
               {profile?.display_name || 'Usuario'}
             </span>
-            <Settings size={11} style={{ color: 'rgba(255,255,255,0.2)' }} />
+            <Settings size={11} className="desktop-username" style={{ color: 'rgba(255,255,255,0.2)' }} />
           </button>
         </div>
       </header>
@@ -260,8 +260,47 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
         select option { background: rgb(20, 20, 28); color: rgba(255,255,255,0.85); }
       `}</style>
 
+      {/* Bottom Tab Bar — mobile only */}
+      <nav className="bottom-tab-bar" style={{ display: 'none' }}>
+        {tabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => onSectionChange(tab.id)}
+            style={{
+              color: section === tab.id ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.35)',
+              position: 'relative',
+            }}
+          >
+            {tab.icon}
+            <span>{tab.label}</span>
+            {tab.badge !== undefined && tab.badge > 0 && (
+              <span style={{
+                position: 'absolute', top: 0, right: 4,
+                minWidth: 12, height: 12, borderRadius: '6px',
+                padding: '0 3px',
+                background: 'rgba(239,68,68,0.9)',
+                color: 'white',
+                fontSize: '7px', fontWeight: 700,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {tab.badge}
+              </span>
+            )}
+          </button>
+        ))}
+        <button
+          onClick={() => onSectionChange('settings')}
+          style={{
+            color: section === 'settings' ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.35)',
+          }}
+        >
+          <Settings size={14} />
+          <span>Config</span>
+        </button>
+      </nav>
+
       {/* Main Content */}
-      <main style={{
+      <main className="app-main" style={{
         flex: 1,
         position: 'relative',
         zIndex: 1,

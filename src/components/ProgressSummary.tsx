@@ -71,7 +71,7 @@ export const ProgressSummary: React.FC = () => {
   );
 
   return (
-    <div style={{
+    <div className="progress-summary" style={{
       display: 'flex',
       alignItems: 'center',
       gap: '20px',
