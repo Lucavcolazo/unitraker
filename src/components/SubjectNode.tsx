@@ -24,6 +24,12 @@ const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: st
     text: 'rgba(255,255,255,0.4)',
     glow: 'none',
   },
+  cursando: {
+    bg: 'rgba(255,255,255,0.02)',
+    border: '1px solid rgba(255,255,255,0.5)',
+    text: 'rgba(255,255,255,0.9)',
+    glow: '0 0 14px rgba(255,255,255,0.10)',
+  },
   final: {
     bg: 'var(--status-final-bg)',
     border: '1px solid var(--status-final-border)',
@@ -40,6 +46,7 @@ const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: st
 
 const statusLabel: Record<SubjectStatus, string> = {
   pending: '',
+  cursando: 'Cursando',
   final: 'Final',
   approved: 'Aprobada',
 };
@@ -128,6 +135,8 @@ export const SubjectNode: React.FC<NodeProps<SubjectNodeType>> = ({ data, id }) 
             ? 'rgba(255,255,255,0.04)'
             : status === 'approved'
               ? 'rgba(74, 222, 128, 0.15)'
+              : status === 'cursando'
+                ? 'rgba(255,255,255,0.08)'
               : status === 'pending'
                 ? 'var(--status-regular-bg)'
                 : 'rgba(251, 146, 60, 0.15)',
@@ -135,6 +144,8 @@ export const SubjectNode: React.FC<NodeProps<SubjectNodeType>> = ({ data, id }) 
             ? '1.5px solid rgba(255,255,255,0.1)'
             : status === 'approved'
               ? '1.5px solid var(--status-aprobada-border)'
+              : status === 'cursando'
+                ? '1.5px solid rgba(255,255,255,0.35)'
               : status === 'pending'
                 ? '1.5px solid rgba(96, 165, 250, 0.35)'
                 : '1.5px solid var(--status-final-border)',
@@ -147,6 +158,8 @@ export const SubjectNode: React.FC<NodeProps<SubjectNodeType>> = ({ data, id }) 
             ? 'rgba(255,255,255,0.25)'
             : status === 'approved'
               ? 'var(--status-aprobada)'
+              : status === 'cursando'
+                ? 'rgba(255,255,255,0.88)'
               : status === 'pending'
                 ? 'var(--status-regular)'
                 : 'var(--status-final)',

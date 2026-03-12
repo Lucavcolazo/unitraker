@@ -208,6 +208,7 @@ export const DashboardLayout: React.FC<Props> = ({ children, section, onSectionC
           }}>
             {[
               { label: 'Pendiente', color: 'rgba(255,255,255,0.2)', bg: 'var(--bg-surface)' },
+              { label: 'Cursando', color: 'rgba(255,255,255,0.85)', bg: 'rgba(255,255,255,0.04)' },
               { label: 'Final', color: '#FB923C', bg: 'var(--status-final-bg)' },
               { label: 'Aprobada', color: '#4ADE80', bg: 'var(--status-aprobada-bg)' },
             ].map(({ label, color, bg }) => (

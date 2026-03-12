@@ -14,6 +14,12 @@ const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: st
     text: 'rgba(255,255,255,0.4)',
     glow: 'none',
   },
+  cursando: {
+    bg: 'rgba(255,255,255,0.02)',
+    border: '1px solid rgba(255,255,255,0.5)',
+    text: 'rgba(255,255,255,0.9)',
+    glow: '0 0 14px rgba(255,255,255,0.10)',
+  },
   final: {
     bg: 'var(--status-final-bg)',
     border: '1px solid var(--status-final-border)',
@@ -30,6 +36,7 @@ const statusStyles: Record<SubjectStatus, { bg: string; border: string; text: st
 
 const statusLabel: Record<SubjectStatus, string> = {
   pending: '',
+  cursando: 'Cursando',
   final: 'Final',
   approved: 'Aprobada',
 };
@@ -253,9 +260,24 @@ export const CurriculumMap: React.FC = () => {
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const [arrows, setArrows] = useState<ArrowData[]>([]);
   const [svgSize, setSvgSize] = useState({ width: 0, height: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   const { profile } = useAuth();
   const { activePlanSubjects } = usePlanStore();
+
+  useEffect(() => {
+    const detectMobile = () => {
+      if (typeof window === 'undefined') return;
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    detectMobile();
+    window.addEventListener('resize', detectMobile);
+
+    return () => {
+      window.removeEventListener('resize', detectMobile);
+    };
+  }, []);
 
   // Use dynamic plan subjects if available, otherwise static curriculum
   const baseCurriculum = activePlanSubjects.length > 0 ? activePlanSubjects : curriculum;
@@ -353,21 +375,80 @@ export const CurriculumMap: React.FC = () => {
   }, [subjectStates, zoom, filteredCurriculum]);
 
   useEffect(() => {
-    // Compute on mount and when states/zoom change, with a small delay for layout
+    // Compute on mount and cuando cambian estados/zoom, con un pequeño delay para el layout
     const timer = setTimeout(computeArrows, 100);
     return () => clearTimeout(timer);
   }, [computeArrows]);
 
-  // Also recompute on scroll
+  // También recomputar ante cambios de tamaño del contenedor
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    // Recompute is not needed on scroll since SVG is inside the content
-    // But we need resize observer
     const ro = new ResizeObserver(() => computeArrows());
     ro.observe(container);
     return () => ro.disconnect();
   }, [computeArrows]);
+
+  if (isMobile) {
+    return (
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'var(--bg-base)',
+          color: 'rgba(255,255,255,0.85)',
+          fontFamily: "'Syne', sans-serif",
+          padding: '32px 20px 80px',
+          textAlign: 'center',
+        }}
+      >
+        <div style={{ maxWidth: 360 }}>
+          <img
+            src="/contruccion.gif"
+            alt="Mapa en construcción para mobile"
+            style={{
+              width: '220px',
+              maxWidth: '100%',
+              margin: '0 auto 20px',
+              display: 'block',
+            }}
+          />
+          <h2
+            style={{
+              fontSize: '20px',
+              fontWeight: 700,
+              margin: 0,
+              marginBottom: '8px',
+            }}
+          >
+            Mapa en construcción para mobile
+          </h2>
+          <p
+            style={{
+              margin: 0,
+              marginBottom: '4px',
+              fontSize: '13px',
+              color: 'rgba(255,255,255,0.7)',
+            }}
+          >
+          Ni entra esta pantalla aca.
+          </p>
+          <p
+            style={{
+              margin: 0,
+              fontSize: '12px',
+              color: 'rgba(255,255,255,0.5)',
+            }}
+          >
+            Abrí UniTraker desde tu notebook o PC para ver el mapa curricular completo.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

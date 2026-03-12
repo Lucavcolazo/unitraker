@@ -1,4 +1,4 @@
-export type SubjectStatus = 'pending' | 'final' | 'approved';
+export type SubjectStatus = 'pending' | 'cursando' | 'final' | 'approved';
 
 export interface Subject {
     id: string;

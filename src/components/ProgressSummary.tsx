@@ -12,14 +12,20 @@ export const ProgressSummary: React.FC = () => {
   const allSubjects = base;
 
   const countByStatus = (subjects: typeof curriculum) => {
-    let approved = 0, finalState = 0, pending = 0;
+    let approved = 0;
+    let finalState = 0;
+    let cursando = 0;
+    let pending = 0;
+
     subjects.forEach(s => {
       const st = subjectStates[s.id] || 'pending';
       if (st === 'approved') approved++;
       else if (st === 'final') finalState++;
+      else if (st === 'cursando') cursando++;
       else pending++;
     });
-    return { approved, final: finalState, pending, total: subjects.length };
+
+    return { approved, final: finalState, cursando, pending, total: subjects.length };
   };
 
   const analystStats = countByStatus(analystSubjects);

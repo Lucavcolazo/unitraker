@@ -19,6 +19,7 @@ import { LoadGradesModal } from './LoadGradesModal';
 
 const STATUS_CONFIG: Record<SubjectStatus, { label: string; labelPlural?: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
   approved: { label: 'Aprobadas', color: '#4ADE80', bg: 'rgba(74, 222, 128, 0.05)', border: 'rgba(74, 222, 128, 0.35)', icon: <CheckCircle2 size={14} /> },
+  cursando: { label: 'Cursando', labelPlural: 'Cursando', color: 'rgba(255,255,255,0.85)', bg: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.18)', icon: <BookOpen size={14} /> },
   final: { label: 'Final pendiente', labelPlural: 'Finales pendientes', color: '#FB923C', bg: 'rgba(251, 146, 60, 0.05)', border: 'rgba(251, 146, 60, 0.35)', icon: <FileText size={14} /> },
   pending: { label: 'Pendientes', color: 'rgba(255,255,255,0.35)', bg: 'var(--bg-surface)', border: 'var(--bg-border)', icon: <BookOpen size={14} /> },
 };
@@ -294,6 +295,7 @@ export const StatsPage: React.FC = () => {
   const stats = useMemo(() => {
     const byStatus: Record<SubjectStatus, typeof curriculum> = {
       approved: [],
+      cursando: [],
       final: [],
       pending: [],
     };
@@ -345,6 +347,7 @@ export const StatsPage: React.FC = () => {
 
   const donutSegments = [
     { value: stats.byStatus.approved.length, color: '#4ADE80', label: 'Aprobadas' },
+    { value: stats.byStatus.cursando.length, color: 'rgba(255,255,255,0.82)', label: 'Cursando' },
     { value: stats.byStatus.final.length, color: '#FB923C', label: stats.byStatus.final.length === 1 ? 'Final pend.' : 'Finales pend.' },
     { value: stats.byStatus.pending.length, color: 'rgba(255,255,255,0.12)', label: 'Pendientes' },
   ];
@@ -363,12 +366,13 @@ export const StatsPage: React.FC = () => {
         flexDirection: 'column',
         gap: '20px',
       }}>
-        {/* Top: 4 módulos — Aprobadas, Final pend., Pendientes, Promedio (derecha) */}
-        <div className="grid-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+        {/* Top: estados + promedio */}
+        <div className="grid-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
           {([
             { status: 'approved' as SubjectStatus, delay: 0 },
-            { status: 'final' as SubjectStatus, delay: 100 },
-            { status: 'pending' as SubjectStatus, delay: 200 },
+            { status: 'cursando' as SubjectStatus, delay: 100 },
+            { status: 'final' as SubjectStatus, delay: 200 },
+            { status: 'pending' as SubjectStatus, delay: 300 },
           ]).map(({ status, delay }) => {
             const config = STATUS_CONFIG[status];
             const count = stats.byStatus[status].length;
@@ -635,6 +639,12 @@ export const StatsPage: React.FC = () => {
             subjects={stats.byStatus.final}
             icon={<FileText size={14} />}
             color="#FB923C"
+          />
+          <SubjectList
+            title="Cursando"
+            subjects={stats.byStatus.cursando}
+            icon={<BookOpen size={14} />}
+            color="rgba(255,255,255,0.82)"
           />
           <SubjectList
             title="Pendientes"

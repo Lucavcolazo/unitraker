@@ -75,11 +75,16 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
   }, [profile?.degree_track, baseCurriculum]);
 
   const stats = useMemo(() => {
-    let approved = 0, final = 0, pending = 0;
+    let approved = 0;
+    let final = 0;
+    let cursando = 0;
+    let pending = 0;
+
     filteredCurriculum.forEach(s => {
       const st = subjectStates[s.id] || 'pending';
       if (st === 'approved') approved++;
       else if (st === 'final') final++;
+      else if (st === 'cursando') cursando++;
       else pending++;
     });
 
@@ -91,7 +96,10 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     const finalSubjects = baseCurriculum.filter(s => subjectStates[s.id] === 'final');
 
     return {
-      approved, final, pending,
+      approved,
+      final,
+      cursando,
+      pending,
       total: filteredCurriculum.length,
       analystAll, analystApproved,
       engAll, engApproved,
@@ -216,16 +224,18 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* Pendientes */}
+          {/* Pendientes / Cursando */}
           <div style={{ background: V.surface, padding: '22px 24px', display: 'flex', flexDirection: 'column', gap: 4 }}>
             <div style={{ fontFamily: fontMono, fontSize: 10, letterSpacing: 1.5, textTransform: 'uppercase', color: V.muted }}>
-              Pendientes
+              Pendientes / Cursando
             </div>
             <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: -1, lineHeight: 1, color: '#71717a' }}>
               <AnimatedNumber value={stats.pending} delay={300} />
             </div>
             <div style={{ fontSize: 11, color: V.muted, fontFamily: fontMono }}>
-              por cursar
+              {stats.cursando > 0
+                ? `${stats.pending} por cursar · ${stats.cursando} cursando`
+                : 'por cursar'}
             </div>
           </div>
 
